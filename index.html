@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creatinas · Atlhetica Nutrition — Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <div class="phone-frame">
+      <div class="phone-frame__scroll">
+
+      <!-- Profile Header -->
+      <section class="profile-header">
+        <div class="banner">
+          <img class="banner__img" src="assets/banner.png" alt="Creatina Monohidratada Atlhetica Nutrition" />
+          <p class="banner__label">CREATINAS</p>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <p class="stat__value" id="followersValue" data-count="32000">32K</p>
+            <p class="stat__label">SEGUIDORES</p>
+          </div>
+          <div class="stat">
+            <p class="stat__value">1.2M</p>
+            <p class="stat__label">SEGUINDO</p>
+          </div>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn--follow" id="followBtn" type="button" aria-pressed="false">
+            <img class="btn__icon" src="assets/icon-follow.svg" alt="" aria-hidden="true">
+            <span class="btn__label" id="followLabel">SEGUIR</span>
+          </button>
+          <button class="btn btn--message" id="messageBtn" type="button">
+            <img class="btn__icon" src="assets/icon-message.svg" alt="" aria-hidden="true">
+            <span class="btn__label">MENSAGEM</span>
+          </button>
+        </div>
+
+        <div class="avatar">
+          <img class="avatar__img" src="assets/avatar.svg" alt="Atlhetica Nutrition" />
+        </div>
+      </section>
+
+      <!-- Categories Row -->
+      <nav class="categories-row" aria-label="Categorias de produtos">
+        <button class="category" type="button" data-category="creatinas">
+          <img class="category__ring" src="assets/category-ring.svg" alt="" aria-hidden="true">
+          <span class="category__badge"><span class="category__label">Creatinas</span></span>
+        </button>
+        <button class="category" type="button" data-category="best-whey">
+          <img class="category__ring" src="assets/category-ring.svg" alt="" aria-hidden="true">
+          <span class="category__badge"><span class="category__label">Best Whey</span></span>
+        </button>
+        <button class="category" type="button" data-category="best-vegan">
+          <img class="category__ring" src="assets/category-ring.svg" alt="" aria-hidden="true">
+          <span class="category__badge"><span class="category__label">Best Vegan</span></span>
+        </button>
+        <button class="category" type="button" data-category="performance">
+          <img class="category__ring" src="assets/category-ring.svg" alt="" aria-hidden="true">
+          <span class="category__badge"><span class="category__label">Performance</span></span>
+        </button>
+        <button class="category" type="button" data-category="go-endurance">
+          <img class="category__ring" src="assets/category-ring.svg" alt="" aria-hidden="true">
+          <span class="category__badge"><span class="category__label">Go! Endurance</span></span>
+        </button>
+      </nav>
+
+      <!-- Tabs -->
+      <nav class="tabs" aria-label="Abas do perfil">
+        <div class="tabs__underline"></div>
+        <div class="tabs__indicator" id="tabsIndicator"></div>
+        <div class="tabs__row">
+          <div class="tabs__labels">
+            <button class="tabs__tab is-active" type="button" data-tab="posts">POSTS</button>
+            <button class="tabs__tab" type="button" data-tab="reels">REELS</button>
+          </div>
+          <img class="tabs__icons" src="assets/tabs-view-icons.svg" alt="Opções de visualização: grade ou lista" />
+        </div>
+      </nav>
+
+      <!-- Photo Grid -->
+      <main class="photo-grid" aria-label="Publicações do perfil">
+        <div class="photo-grid__column">
+          <img class="photo photo--sq" src="assets/post-1.png" data-story-index="1" alt="Creatina Monohidratada Atlhetica — apenas 1 ingrediente">
+          <img class="photo photo--tall" src="assets/post-2.png" data-story-index="2" alt="Creatina aprovada em todos os critérios de teor e força">
+          <img class="photo photo--sq" src="assets/post-3.png" data-story-index="3" alt="Fórmula limpa e alerta sobre imitações">
+          <img class="photo photo--sq" src="assets/post-1.png" data-story-index="1" alt="" aria-hidden="true">
+          <img class="photo photo--tall" src="assets/post-2.png" data-story-index="2" alt="" aria-hidden="true">
+          <img class="photo photo--sq" src="assets/post-3.png" data-story-index="3" alt="" aria-hidden="true">
+        </div>
+        <div class="photo-grid__column">
+          <img class="photo photo--tall" src="assets/post-4.png" data-story-index="4" alt="Creatina Monohidratada — pote do produto">
+          <img class="photo photo--sq" src="assets/post-5.png" data-story-index="5" alt="Creatina micronizada 100% pura">
+          <img class="photo photo--sq" src="assets/post-6.png" data-story-index="6" alt="Transparência no rótulo">
+          <img class="photo photo--tall" src="assets/post-4.png" data-story-index="4" alt="" aria-hidden="true">
+          <img class="photo photo--sq" src="assets/post-5.png" data-story-index="5" alt="" aria-hidden="true">
+          <img class="photo photo--sq" src="assets/post-6.png" data-story-index="6" alt="" aria-hidden="true">
+        </div>
+        <div class="photo-grid__column">
+          <img class="photo photo--sq" src="assets/post-7.png" data-story-index="7" alt="Marca analisada e aprovada pela Atlhetica Nutrition">
+          <img class="photo photo--tall" src="assets/post-8.png" data-story-index="8" alt="Um único ingrediente, comprovadamente puro">
+          <img class="photo photo--sq" src="assets/post-9.png" data-story-index="9" alt="Creatina Atlhetica Nutrition em detalhe">
+          <img class="photo photo--sq" src="assets/post-7.png" data-story-index="7" alt="" aria-hidden="true">
+          <img class="photo photo--tall" src="assets/post-8.png" data-story-index="8" alt="" aria-hidden="true">
+          <img class="photo photo--sq" src="assets/post-9.png" data-story-index="9" alt="" aria-hidden="true">
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p class="footer__label">WE ALL ABOUT TASTE YOU | ATLHETICANUTRITION.COM.BR</p>
+      </footer>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Story Viewer (lightbox das publicações) -->
+  <div class="story-modal" id="storyModal" aria-hidden="true">
+    <div class="story-modal__backdrop" data-story-close></div>
+
+    <div class="story-modal__card" role="dialog" aria-modal="true" aria-label="Publicação ampliada">
+      <header class="story-modal__header">
+        <div class="story-modal__profile">
+          <img class="story-modal__avatar" src="assets/story-avatar.svg" alt="" aria-hidden="true">
+          <span class="story-modal__name">CREATINAS</span>
+        </div>
+        <div class="story-modal__actions">
+          <button class="story-modal__icon-btn" type="button" id="storyMoreBtn" aria-label="Mais opções">
+            <img src="assets/story-icon-more.svg" alt="" aria-hidden="true">
+          </button>
+          <button class="story-modal__icon-btn" type="button" id="storyCloseBtn" aria-label="Fechar" data-story-close>
+            <img src="assets/story-icon-close.svg" alt="" aria-hidden="true">
+          </button>
+        </div>
+      </header>
+
+      <div class="story-modal__progress" id="storyProgress"></div>
+
+      <div class="story-modal__stage">
+        <button class="story-modal__nav story-modal__nav--prev" type="button" id="storyPrevBtn" aria-label="Publicação anterior"></button>
+        <button class="story-modal__nav story-modal__nav--next" type="button" id="storyNextBtn" aria-label="Próxima publicação"></button>
+        <img class="story-modal__image" id="storyImage" src="" alt="">
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

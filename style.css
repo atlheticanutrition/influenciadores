@@ -1,0 +1,702 @@
+/* =========================================================
+   Creatinas — Profile Header
+   Implementação fiel ao Figma (node 18:329 · "Profile Header")
+   Fonte: Chakra Petch (SemiBold) · Referência de design: 430px
+   ========================================================= */
+
+:root {
+  --gray-bg: #d9d9d9;
+  --black: #000000;
+  --white: #ffffff;
+  --page-bg: #f2f2f2;
+  --cinza-800: #cccccc;
+  --cinza-400: #666666;
+  --design-width: 430; /* largura de referência do frame no Figma */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Chakra Petch', sans-serif;
+  background: var(--page-bg);
+  color: var(--black);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 16px;
+}
+
+/* "Tela" do celular que envolve o componente — mantém a proporção
+   do frame do Figma (430px) e escala fluidamente em telas menores.
+   Sem a status bar, a tela tem altura fixa (como um device real) e o
+   feed rola por dentro dela em .phone-frame__scroll. */
+.phone-frame {
+  width: 100%;
+  max-width: 430px;
+  height: min(844px, calc(100vh - 80px));
+  background: var(--white);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+
+  /* Habilita unidades cqw para o texto escalar junto com o componente */
+  container-type: inline-size;
+  container-name: profile;
+}
+
+.phone-frame__scroll {
+  height: 100%;
+  padding-top: 4.6512%;   /* respiro superior que antes vinha da status bar */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* =====================================================
+   Profile Header
+   ===================================================== */
+
+.profile-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 3.2558%;           /* 14 / 430 */
+  padding-bottom: 4.6512%;      /* respiro inferior equivalente ao frame original */
+}
+
+/* ---------- Banner ---------- */
+
+.banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 402 / 140.983;  /* proporção exata do banner no Figma */
+  overflow: hidden;
+}
+
+.banner__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.banner__label {
+  position: absolute;
+  top: 43.3%;
+  right: 4.5%;
+  font-weight: 600;
+  font-size: clamp(11px, 3.4cqw, 12.216px);
+  color: var(--white);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Avatar (sobrepõe banner + linha de estatísticas) ---------- */
+
+.avatar {
+  position: absolute;
+  /* Posicionado em relação ao .profile-header (não ao fluxo), para que o
+     círculo flutue sobre o banner/stats sem empurrar os botões abaixo dele. */
+  top: 16.2791cqw;                /* 70 / 430 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 31.3953%;                /* 135 / 430 (caixa de padding do profile-header) */
+  aspect-ratio: 1 / 1;
+  z-index: 2;
+}
+
+.avatar__img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Stats Row ---------- */
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5.2239% 6.9652% 0 7.2139%; /* top 21 / pr 28 / pl 29, base 402 */
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat__value,
+.stat__label {
+  font-weight: 600;
+  font-size: clamp(11px, 3.4cqw, 12.216px);
+  line-height: 1.35;
+  white-space: nowrap;
+  color: var(--black);
+}
+
+.stat__label {
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Actions Row ---------- */
+
+.actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4876%;         /* 10 / 402 */
+  width: 100%;
+  padding-top: 6.2189%;  /* 25 / 402 */
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2388%;
+  width: 32.5871%;        /* 131 / 402 */
+  aspect-ratio: 131 / 30;
+  border: none;
+  border-radius: 4px;
+  background: var(--gray-bg);
+  color: var(--black);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(11px, 3.4cqw, 12.216px);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.08s ease;
+}
+
+.btn:hover {
+  background: #cfcfcf;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.btn__icon {
+  width: 2.7363%;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.btn--message .btn__icon {
+  width: 3.4826%;
+}
+
+.btn__label {
+  white-space: nowrap;
+}
+
+/* Estado "Seguindo" (após clicar em SEGUIR) */
+.btn--follow.is-following {
+  background: var(--black);
+  color: var(--white);
+}
+
+.btn--follow.is-following:hover {
+  background: #1a1a1a;
+}
+
+/* =====================================================
+   Toast de feedback (interação JS)
+   ===================================================== */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 16px);
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  padding: 12px 20px;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  max-width: calc(100vw - 32px);
+  text-align: center;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* =====================================================
+   Categories Row
+   ===================================================== */
+
+.categories-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.7907%;               /* 12 / 430 */
+  padding: 0 3.2558%;         /* 14 / 430 */
+  margin-top: 4.4186%;        /* 19 / 430 */
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.categories-row::-webkit-scrollbar {
+  display: none;
+}
+
+.category {
+  position: relative;
+  flex: 0 0 16.7442%;         /* 72 / 430 */
+  aspect-ratio: 1 / 1;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.category__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.category__badge {
+  position: absolute;
+  inset: 9.7222%;              /* 7 / 72 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--black);
+  padding: 6%;
+  text-align: center;
+  transition: transform 0.15s ease;
+}
+
+.category:hover .category__badge,
+.category:focus-visible .category__badge {
+  transform: scale(1.05);
+}
+
+.category:active .category__badge {
+  transform: scale(0.95);
+}
+
+.category:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+.category__label {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 600;
+  font-size: clamp(5.5px, 1.55cqw, 6.2px);
+  line-height: 1.25;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  word-break: break-word;
+}
+
+/* =====================================================
+   Tabs
+   ===================================================== */
+
+.tabs {
+  position: relative;
+  margin: 5.5814% 5.814% 0;    /* top 24 / lr 25, base 430 */
+  padding-bottom: 3.7209%;     /* 16 / 430 */
+}
+
+.tabs__underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--cinza-800, #cccccc);
+}
+
+.tabs__indicator {
+  position: absolute;
+  left: 7.8947%;                /* 30 / 380 */
+  width: 12.6316%;               /* 48 / 380 */
+  bottom: -1px;
+  height: 1.5px;
+  background: var(--cinza-400, #666666);
+  transition: left 0.25s ease, width 0.25s ease;
+}
+
+.tabs__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 8.1395%;           /* 35 / 430 */
+}
+
+.tabs__labels {
+  display: flex;
+  align-items: flex-start;
+  gap: 23.9535cqw;               /* 103 / 430, resolvido contra o phone-frame */
+}
+
+.tabs__tab {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 400;
+  font-size: clamp(10.5px, 2.79cqw, 12px);
+  line-height: 1.33;
+  color: var(--black);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tabs__tab.is-active {
+  font-weight: 600;
+}
+
+.tabs__icons {
+  display: block;
+  width: clamp(20px, 5.77cqw, 24.793px);
+  height: auto;
+  align-self: center;
+}
+
+/* =====================================================
+   Photo Grid
+   ===================================================== */
+
+.photo-grid {
+  display: flex;
+  gap: 2.093%;                  /* 9 / 430 */
+  padding: 0 3.2558%;
+  margin-top: 3.2558%;          /* 14 / 430 */
+}
+
+.photo-grid__column {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* cqw, não % — a coluna tem altura intrínseca (auto), e um row-gap em %
+     dentro de um eixo principal de altura indefinida é mal resolvido pelo
+     navegador (a última imagem "vaza" para fora da caixa da coluna). cqw
+     sempre resolve contra a largura estável do .phone-frame. */
+  gap: 2.3256cqw;                /* 10 / 430 */
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  border-radius: clamp(10px, 4.65cqw, 20px);
+  background: var(--gray-bg);
+}
+
+.photo--sq {
+  aspect-ratio: 130 / 126;
+}
+
+.photo--tall {
+  aspect-ratio: 130 / 172;
+}
+
+/* =====================================================
+   Footer
+   ===================================================== */
+
+.footer {
+  display: flex;
+  justify-content: center;
+  /* Faixa branca própria, bem separada do grid acima e da borda inferior —
+     evita que o pill preto encoste/pareça sobreposto aos cards escuros. */
+  padding: 9.3023% 3.2558%;     /* 40 / 430 (topo e base) · 14 / 430 (laterais) */
+  background: var(--white);
+}
+
+.footer__label {
+  margin: 0;
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7em 1.2em;
+  border-radius: 999px;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 600;
+  font-size: clamp(5px, 1.76cqw, 7.576px); /* piso mais baixo: garante encaixe mesmo se a fonte
+                                               carregada tiver métricas mais largas que a do Figma */
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+/* =====================================================
+   Story Viewer (lightbox — node 29:52 · "Influenciadores - Stories")
+   Abre ao clicar em qualquer foto do grid, navega entre as 9
+   publicações únicas com barra de progresso segmentada.
+   ===================================================== */
+
+.story-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.story-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease;
+}
+
+.story-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+}
+
+.story-modal__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 430px;
+  height: min(932px, 100%);
+  background: #1a1a1a;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 4.6512% 0 5.1163%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: scale(0.95);
+  transition: transform 0.2s ease;
+
+  /* Mesma técnica de escala fluida (cqw) do phone-frame */
+  container-type: inline-size;
+  container-name: story;
+}
+
+.story-modal.is-open .story-modal__card {
+  transform: scale(1);
+}
+
+/* ---------- Cabeçalho (avatar + nome + ações) ---------- */
+/* Sem status bar (mesmo critério usado no feed): o respiro que ela ocupava
+   vira só o padding-top do próprio card. */
+
+.story-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: 0 4.4186% 0 10.1163%;
+}
+
+/* ---------- Barra de progresso (segmentos) ---------- */
+
+.story-modal__progress {
+  display: flex;
+  gap: 1.2%;
+  padding: 0 9.1488% 0 8.4535%;
+  margin-top: 5.691%;            /* "Spacer" entre header e barra */
+  flex-shrink: 0;
+}
+
+.story-modal__segment {
+  flex: 1 1 0;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.35);
+  overflow: hidden;
+}
+
+.story-modal__segment span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--white);
+  transition: width 0.15s ease;
+}
+
+.story-modal__segment.is-filled span {
+  width: 100%;
+}
+
+.story-modal__profile {
+  display: flex;
+  align-items: center;
+  gap: 14.0698%;
+  min-width: 0;
+}
+
+.story-modal__avatar {
+  display: block;
+  width: 15.814%;                /* 68 / 430 */
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+}
+
+.story-modal__name {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: clamp(13px, 3.9cqw, 16px);
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.story-modal__actions {
+  display: flex;
+  align-items: center;
+  gap: 3.0233%;
+  flex-shrink: 0;
+}
+
+.story-modal__icon-btn {
+  display: flex;
+  width: clamp(14px, 3.9cqw, 16px);
+  height: clamp(14px, 3.9cqw, 16px);
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.story-modal__icon-btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Palco da imagem ---------- */
+
+.story-modal__stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 3.6365%;           /* "Spacer" antes do conteúdo */
+  padding: 0 4.4186% 0 5.1163%;
+}
+
+.story-modal__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 20px;
+  background: #000;
+}
+
+.story-modal__nav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.story-modal__nav--prev {
+  left: 0;
+}
+
+.story-modal__nav--next {
+  right: 0;
+  width: 60%;
+}
+
+/* Fallback: navegadores sem suporte a container query units (cqw) */
+@supports not (font-size: 1cqw) {
+  .banner__label,
+  .stat__value,
+  .stat__label,
+  .btn,
+  .tabs__tab {
+    font-size: clamp(11px, 3vw, 12.216px);
+  }
+
+  .category__label {
+    font-size: clamp(5.5px, 1.4vw, 6.2px);
+  }
+
+  .footer__label {
+    font-size: clamp(6.5px, 1.6vw, 7.576px);
+  }
+
+  .tabs__icons {
+    width: 24.793px;
+  }
+
+  .tabs__labels {
+    gap: 24vw;
+  }
+
+  .photo-grid__column {
+    gap: 10px;
+  }
+
+  .story-modal__name {
+    font-size: clamp(13px, 3.7vw, 16px);
+  }
+
+  .story-modal__icon-btn {
+    width: 16px;
+    height: 16px;
+  }
+}
