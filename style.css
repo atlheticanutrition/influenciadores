@@ -50,25 +50,24 @@ body {
 .phone-frame {
   width: 100%;
   max-width: 430px;
-  height: 100dvh;
   margin: 0 auto;
   background: var(--white);
-  overflow: hidden;
 
   /* Habilita unidades cqw para o texto escalar junto com o componente */
   container-type: inline-size;
   container-name: profile;
+
+  /* Sem altura fixa nem scroll travado aqui: no celular (regra base), o
+     conteúdo flui normal e quem rola é a própria página. Isso evita o
+     corte no topo/rodapé que "100dvh + overflow: hidden" causava em
+     navegadores móveis reais, onde a barra de endereço aparece/some e
+     o dvh não acompanha perfeitamente a cada frame. */
 }
 
 .phone-frame__scroll {
-  height: 100%;
   /* respiro superior que antes vinha da status bar, somado à área segura
      do notch/ilha dinâmica quando instalado como app (viewport-fit=cover) */
   padding-top: calc(4.6512% + env(safe-area-inset-top, 0px));
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
 }
 
 /* A moldura/cartão só aparece em desktop de verdade — mouse (pointer: fine)
@@ -77,7 +76,9 @@ body {
    relatam uma largura de viewport maior que 481px, o que fazia o app
    "encolher" dentro de um cartão em vez de ocupar a tela toda. Em qualquer
    aparelho com toque, o conteúdo agora é sempre edge-to-edge — cara de app
-   instalado de verdade. */
+   instalado de verdade. Só aqui, no "simulador de device" de desktop, é que
+   faz sentido travar a altura e rolar por dentro — é isso que dá a ilusão
+   de tela de celular dentro do cartão. */
 @media (min-width: 481px) and (hover: hover) and (pointer: fine) {
   .page {
     display: flex;
@@ -89,8 +90,17 @@ body {
 
   .phone-frame {
     height: min(844px, calc(100dvh - 80px));
+    overflow: hidden;
     border-radius: 24px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  }
+
+  .phone-frame__scroll {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
   }
 }
 
