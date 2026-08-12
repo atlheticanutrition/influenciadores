@@ -23,14 +23,11 @@ html, body {
   padding: 0;
 }
 
-/* No celular quem rola é a própria página (ver .phone-frame). "proximity"
-   (não "mandatory") deixa o scroll livre em todo o resto da tela e só
-   ajuda a fileira do grid a "encaixar" quando o gesto termina perto dela —
-   sem forçar pulos estranhos ao rolar pelo cabeçalho/categorias, onde não
-   há pontos de encaixe definidos. */
-html {
-  scroll-snap-type: y proximity;
-}
+/* scroll-snap-type (encaixe por fileira) foi removido: em teste real ele
+   causava um bug sério de navegador — a página carregava com o scroll já
+   pulado pra baixo (o próprio navegador "corrige" a posição assim que o
+   scroll-snap-type fica ativo, mesmo com "proximity" e mesmo ativando só
+   depois do load). Preferível ficar sem o encaixe do que carregar torto. */
 
 body {
   font-family: 'Chakra Petch', sans-serif;
@@ -110,10 +107,6 @@ body {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
-    /* Aqui é essa div (não a página) que rola de verdade, então o encaixe
-       do grid precisa estar nela — o "scroll-snap-type: y" do <html> não
-       tem efeito num elemento que nem chega a rolar. */
-    scroll-snap-type: y proximity;
   }
 }
 
@@ -441,10 +434,6 @@ body {
   object-fit: cover;
   border-radius: clamp(10px, 4.65cqw, 20px);
   background: var(--gray-bg);
-  /* Ponto de encaixe do scroll: toda foto da mesma fileira começa no mesmo
-     topo, então basta um scroll-snap-align por card pra fileira inteira
-     virar um ponto de parada. */
-  scroll-snap-align: start;
 }
 
 /* =====================================================
