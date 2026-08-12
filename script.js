@@ -82,12 +82,24 @@
 
   if (storyModal && storyImage && storyProgress) {
     // Uma entrada por publicação única (1-9), na ordem em que aparecem no grid.
+    // Cada post pode ter uma arte retangular própria pra tela ampliada
+    // (data-story-src, ex: assets/story-1.png) — diferente da foto quadrada
+    // usada no feed. Enquanto essa arte não existir (404), cai de volta pra
+    // foto do feed, sem quebrar o Stories.
     const posts = Array.from(
       new Map(
-        Array.from(document.querySelectorAll('.photo[data-story-index]')).map((img) => [
-          img.dataset.storyIndex,
-          { src: img.currentSrc || img.src, alt: img.alt || `Publicação ${img.dataset.storyIndex}` },
-        ])
+        Array.from(document.querySelectorAll('.photo[data-story-index]')).map((img) => {
+          const gridSrc = img.currentSrc || img.src;
+          return [
+            img.dataset.storyIndex,
+            {
+              index: img.dataset.storyIndex,
+              src: img.dataset.storySrc || gridSrc,
+              fallbackSrc: gridSrc,
+              alt: img.alt || `Publicação ${img.dataset.storyIndex}`,
+            },
+          ];
+        })
       ).values()
     );
 
@@ -140,12 +152,29 @@
       }
     };
 
+    // Se a arte retangular (data-story-src) ainda não existir, volta pra
+    // foto do feed em vez de deixar a tela ampliada com imagem quebrada.
+    storyImage.addEventListener('error', () => {
+      if (storyImage.dataset.fallback && storyImage.src !== storyImage.dataset.fallback) {
+        storyImage.src = storyImage.dataset.fallback;
+      }
+    });
+    storyBg?.addEventListener('error', () => {
+      if (storyBg.dataset.fallback && storyBg.src !== storyBg.dataset.fallback) {
+        storyBg.src = storyBg.dataset.fallback;
+      }
+    });
+
     const renderSlide = () => {
       const post = posts[currentIndex];
       if (!post) return;
+      storyImage.dataset.fallback = post.fallbackSrc;
       storyImage.src = post.src;
       storyImage.alt = post.alt;
-      if (storyBg) storyBg.src = post.src;
+      if (storyBg) {
+        storyBg.dataset.fallback = post.fallbackSrc;
+        storyBg.src = post.src;
+      }
       updateSegments();
       playActiveSegment();
     };
@@ -204,7 +233,7 @@
     document.querySelectorAll('.photo[data-story-index]').forEach((img) => {
       img.style.cursor = 'zoom-in';
       img.addEventListener('click', () => {
-        const index = posts.findIndex((p) => p.src === (img.currentSrc || img.src));
+        const index = posts.findIndex((p) => p.index === img.dataset.storyIndex);
         openStory(index === -1 ? 0 : index, img);
       });
     });
