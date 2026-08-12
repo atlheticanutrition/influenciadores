@@ -38,6 +38,13 @@ body {
 .page {
   min-height: 100dvh;
   background: var(--white);
+
+  /* Notch / dynamic island / cutout em qualquer aparelho (retrato ou
+     paisagem): evita que o conteúdo fique escondido atrás da área "unsafe".
+     env() resolve para 0px em telas sem recorte, então é inofensivo em
+     qualquer dispositivo — inclusive no modo "moldura" de desktop. */
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 .phone-frame {
@@ -55,7 +62,9 @@ body {
 
 .phone-frame__scroll {
   height: 100%;
-  padding-top: 4.6512%;   /* respiro superior que antes vinha da status bar */
+  /* respiro superior que antes vinha da status bar, somado à área segura
+     do notch/ilha dinâmica quando instalado como app (viewport-fit=cover) */
+  padding-top: calc(4.6512% + env(safe-area-inset-top, 0px));
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -248,7 +257,7 @@ body {
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 28px;
+  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
   transform: translate(-50%, 16px);
   background: var(--black);
   color: var(--white);
@@ -467,6 +476,9 @@ body {
   /* Faixa branca própria, bem separada do grid acima e da borda inferior —
      evita que o pill preto encoste/pareça sobreposto aos cards escuros. */
   padding: 9.3023% 3.2558%;     /* 40 / 430 (topo e base) · 14 / 430 (laterais) */
+  /* soma a área segura inferior (home indicator) sem alterar o respiro visual
+     em aparelhos sem recorte, onde env() resolve para 0px */
+  padding-bottom: calc(9.3023% + env(safe-area-inset-bottom, 0px));
   background: var(--white);
 }
 
@@ -530,7 +542,8 @@ body {
   height: 100dvh;
   background: #1a1a1a;
   overflow: hidden;
-  padding: 4.6512% 0 5.1163%;
+  padding: calc(4.6512% + env(safe-area-inset-top, 0px)) env(safe-area-inset-right, 0px)
+           calc(5.1163% + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0px);
   transform: scale(0.98);
   transition: transform 0.2s ease;
 
@@ -588,11 +601,32 @@ body {
   height: 100%;
   width: 0%;
   background: var(--white);
-  transition: width 0.15s ease;
 }
 
+/* Publicação já vista: barra cheia e estática */
 .story-modal__segment.is-filled span {
   width: 100%;
+}
+
+/* Publicação atual: a barra "anda sozinha" (igual ao Stories do Instagram) —
+   a duração é controlada via JS na custom property --story-duration. */
+.story-modal__segment.is-active span {
+  animation: story-progress-fill var(--story-duration, 5000ms) linear forwards;
+}
+
+/* Segura pressionado para pausar a publicação atual, exatamente como no
+   Instagram: a barra congela no ponto em que estava. */
+.story-modal.is-paused .story-modal__segment.is-active span {
+  animation-play-state: paused;
+}
+
+@keyframes story-progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 .story-modal__profile {

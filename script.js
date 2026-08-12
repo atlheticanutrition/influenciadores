@@ -116,6 +116,7 @@
   const storyModal = document.getElementById('storyModal');
   const storyImage = document.getElementById('storyImage');
   const storyProgress = document.getElementById('storyProgress');
+  const storyStage = document.querySelector('.story-modal__stage');
   const storyCloseBtn = document.getElementById('storyCloseBtn');
   const storyMoreBtn = document.getElementById('storyMoreBtn');
   const storyPrevBtn = document.getElementById('storyPrevBtn');
@@ -132,8 +133,12 @@
       ).values()
     );
 
+    const STORY_DURATION = 5000; // ms por publicação — mesmo ritmo do Stories do Instagram
+
     let currentIndex = 0;
     let lastTrigger = null;
+    let advanceTimer = null;
+    let isPaused = false;
 
     // Monta os segmentos da barra de progresso (um por publicação).
     storyProgress.innerHTML = '';
@@ -145,8 +150,36 @@
       return segment;
     });
 
+    const clearAdvanceTimer = () => {
+      if (advanceTimer) {
+        clearTimeout(advanceTimer);
+        advanceTimer = null;
+      }
+    };
+
     const updateSegments = () => {
-      segments.forEach((segment, i) => segment.classList.toggle('is-filled', i <= currentIndex));
+      segments.forEach((segment, i) => {
+        segment.classList.toggle('is-filled', i < currentIndex);
+        segment.classList.toggle('is-active', i === currentIndex);
+      });
+    };
+
+    // Faz a barra da publicação atual "andar sozinha": reinicia a animação
+    // CSS do zero (por isso o reflow forçado) e agenda a troca automática
+    // de publicação para quando ela terminar de preencher.
+    const playActiveSegment = () => {
+      clearAdvanceTimer();
+      const span = segments[currentIndex]?.querySelector('span');
+      if (!span) return;
+
+      span.style.setProperty('--story-duration', `${STORY_DURATION}ms`);
+      span.style.animationName = 'none';
+      void span.offsetWidth; // força o navegador a "esquecer" a animação anterior
+      span.style.animationName = '';
+
+      if (!isPaused) {
+        advanceTimer = setTimeout(() => goTo(1), STORY_DURATION);
+      }
     };
 
     const renderSlide = () => {
@@ -155,11 +188,37 @@
       storyImage.src = post.src;
       storyImage.alt = post.alt;
       updateSegments();
+      playActiveSegment();
+    };
+
+    // Pressionar e segurar a publicação pausa a barra e a troca automática —
+    // soltar retoma de onde parou. Igual ao gesto do Stories do Instagram.
+    const pauseStory = () => {
+      if (isPaused) return;
+      isPaused = true;
+      storyModal.classList.add('is-paused');
+      clearAdvanceTimer();
+    };
+
+    const resumeStory = () => {
+      if (!isPaused) return;
+      isPaused = false;
+      storyModal.classList.remove('is-paused');
+
+      const segment = segments[currentIndex];
+      const span = segment?.querySelector('span');
+      if (!segment || !span) return;
+
+      const doneRatio = Math.min(span.getBoundingClientRect().width / segment.getBoundingClientRect().width, 1);
+      const remaining = Math.max(STORY_DURATION * (1 - doneRatio), 0);
+      advanceTimer = setTimeout(() => goTo(1), remaining);
     };
 
     const openStory = (index, trigger) => {
       currentIndex = ((index % posts.length) + posts.length) % posts.length;
       lastTrigger = trigger ?? null;
+      isPaused = false;
+      storyModal.classList.remove('is-paused');
       renderSlide();
       storyModal.classList.add('is-open');
       storyModal.setAttribute('aria-hidden', 'false');
@@ -168,7 +227,9 @@
     };
 
     const closeStory = () => {
-      storyModal.classList.remove('is-open');
+      clearAdvanceTimer();
+      isPaused = false;
+      storyModal.classList.remove('is-open', 'is-paused');
       storyModal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
       lastTrigger?.focus();
@@ -176,6 +237,8 @@
 
     const goTo = (delta) => {
       currentIndex = ((currentIndex + delta) % posts.length + posts.length) % posts.length;
+      isPaused = false;
+      storyModal.classList.remove('is-paused');
       renderSlide();
     };
 
@@ -196,11 +259,31 @@
 
     storyMoreBtn?.addEventListener('click', () => showToast('Mais opções em breve.'));
 
+    // Segurar em qualquer ponto do palco (imagem ou áreas de navegação) pausa;
+    // soltar, sair da área ou cancelar o toque retoma de onde parou.
+    if (storyStage) {
+      storyStage.addEventListener('pointerdown', pauseStory);
+      storyStage.addEventListener('pointerup', resumeStory);
+      storyStage.addEventListener('pointerleave', resumeStory);
+      storyStage.addEventListener('pointercancel', resumeStory);
+    }
+
     document.addEventListener('keydown', (event) => {
       if (!storyModal.classList.contains('is-open')) return;
       if (event.key === 'Escape') closeStory();
       if (event.key === 'ArrowRight') goTo(1);
       if (event.key === 'ArrowLeft') goTo(-1);
+      if (event.key === ' ') {
+        event.preventDefault();
+        isPaused ? resumeStory() : pauseStory();
+      }
+    });
+
+    // Pausa automaticamente se o usuário trocar de aba/app e retoma ao voltar.
+    document.addEventListener('visibilitychange', () => {
+      if (!storyModal.classList.contains('is-open')) return;
+      if (document.hidden) pauseStory();
+      else resumeStory();
     });
   }
 })();
