@@ -31,26 +31,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Funciona em qualquer tela, sempre com "cara de app": no celular ocupa
+   a tela inteira, de ponta a ponta (igual a um app instalado); em telas
+   maiores vira um cartão centralizado com moldura, como um simulador de
+   device — sem nunca bloquear o acesso. */
 .page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 40px 16px;
+  min-height: 100dvh;
+  background: var(--white);
 }
 
-/* "Tela" do celular que envolve o componente — mantém a proporção
-   do frame do Figma (430px) e escala fluidamente em telas menores.
-   Sem a status bar, a tela tem altura fixa (como um device real) e o
-   feed rola por dentro dela em .phone-frame__scroll. */
 .phone-frame {
   width: 100%;
   max-width: 430px;
-  height: min(844px, calc(100vh - 80px));
+  height: 100dvh;
+  margin: 0 auto;
   background: var(--white);
-  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
 
   /* Habilita unidades cqw para o texto escalar junto com o componente */
   container-type: inline-size;
@@ -64,6 +60,25 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
+}
+
+/* A partir daqui já não é mais "a tela de um celular real" (telas maiores
+   que a maioria dos smartphones) — some com o edge-to-edge e mostra a
+   moldura, para não esticar o layout de 430px numa janela enorme. */
+@media (min-width: 481px) {
+  .page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    background: var(--page-bg);
+  }
+
+  .phone-frame {
+    height: min(844px, calc(100dvh - 80px));
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  }
 }
 
 /* =====================================================
@@ -489,7 +504,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease, visibility 0s linear 0.2s;
@@ -513,13 +527,11 @@ body {
   flex-direction: column;
   width: 100%;
   max-width: 430px;
-  height: min(932px, 100%);
+  height: 100dvh;
   background: #1a1a1a;
-  border-radius: 20px;
   overflow: hidden;
   padding: 4.6512% 0 5.1163%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  transform: scale(0.95);
+  transform: scale(0.98);
   transition: transform 0.2s ease;
 
   /* Mesma técnica de escala fluida (cqw) do phone-frame */
@@ -529,6 +541,16 @@ body {
 
 .story-modal.is-open .story-modal__card {
   transform: scale(1);
+}
+
+/* Mesmo critério do .phone-frame: em telas maiores que um celular, o
+   modal também vira um cartão com moldura em vez de esticar em tela cheia. */
+@media (min-width: 481px) {
+  .story-modal__card {
+    height: min(844px, calc(100dvh - 48px));
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
 }
 
 /* ---------- Cabeçalho (avatar + nome + ações) ---------- */
