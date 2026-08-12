@@ -1,35 +1,14 @@
 /**
  * Creatinas — Profile Header
- * Interações: seguir/deixar de seguir (com contador real) e botão de mensagem.
+ * Interações: botão de mensagem.
  */
 (() => {
   'use strict';
 
-  const followBtn = document.getElementById('followBtn');
-  const followLabel = document.getElementById('followLabel');
-  const followersValue = document.getElementById('followersValue');
   const messageBtn = document.getElementById('messageBtn');
   const toast = document.getElementById('toast');
 
-  let isFollowing = false;
   let toastTimer = null;
-
-  /**
-   * Formata um número no padrão compacto do Instagram (32000 -> "32K").
-   * Implementado manualmente (em vez de Intl.NumberFormat com notation:
-   * "compact") porque o locale pt-BR escreve por extenso ("32 mil"),
-   * enquanto o padrão do produto usa sempre o sufixo K/M truncado.
-   */
-  const formatCompact = (n) => {
-    const truncate = (value, divisor, suffix) => {
-      const scaled = Math.floor((value / divisor) * 10) / 10;
-      const text = Number.isInteger(scaled) ? scaled.toFixed(0) : scaled.toFixed(1);
-      return `${text}${suffix}`;
-    };
-    if (n >= 1_000_000) return truncate(n, 1_000_000, 'M');
-    if (n >= 1_000) return truncate(n, 1_000, 'K');
-    return String(n);
-  };
 
   const showToast = (message) => {
     toast.textContent = message;
@@ -37,27 +16,6 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2400);
   };
-
-  const updateFollowersDisplay = () => {
-    const count = Number(followersValue.dataset.count);
-    followersValue.textContent = formatCompact(count);
-  };
-
-  const setFollowing = (following) => {
-    isFollowing = following;
-    followBtn.classList.toggle('is-following', following);
-    followBtn.setAttribute('aria-pressed', String(following));
-    followLabel.textContent = following ? 'SEGUINDO' : 'SEGUIR';
-
-    const baseCount = Number(followersValue.dataset.count);
-    followersValue.dataset.count = following ? baseCount + 1 : baseCount - 1;
-    updateFollowersDisplay();
-  };
-
-  followBtn.addEventListener('click', () => {
-    setFollowing(!isFollowing);
-    showToast(isFollowing ? 'Você começou a seguir @creatinas' : 'Você deixou de seguir @creatinas');
-  });
 
   messageBtn.addEventListener('click', () => {
     showToast('Abrindo mensagens com @creatinas…');

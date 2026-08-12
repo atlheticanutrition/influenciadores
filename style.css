@@ -158,35 +158,6 @@ body {
   display: block;
 }
 
-/* ---------- Stats Row ---------- */
-
-.stats-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 5.2239% 6.9652% 0 7.2139%; /* top 21 / pr 28 / pl 29, base 402 */
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.stat__value,
-.stat__label {
-  font-weight: 600;
-  font-size: clamp(11px, 3.4cqw, 12.216px);
-  line-height: 1.35;
-  white-space: nowrap;
-  color: var(--black);
-}
-
-.stat__label {
-  letter-spacing: 0.02em;
-}
-
 /* ---------- Actions Row ---------- */
 
 .actions-row {
@@ -195,7 +166,10 @@ body {
   justify-content: center;
   gap: 2.4876%;         /* 10 / 402 */
   width: 100%;
-  padding-top: 6.2189%;  /* 25 / 402 */
+  /* Sem a stats-row, a linha de botões ficaria colada no banner e por baixo
+     do avatar (que se sobrepõe ao fim do banner). Padding-top maior repõe
+     esse respiro para o avatar continuar só encostando, sem cobrir os botões. */
+  padding-top: 19.6517%;  /* 79 / 402 */
 }
 
 .btn {
@@ -242,16 +216,6 @@ body {
 
 .btn__label {
   white-space: nowrap;
-}
-
-/* Estado "Seguindo" (após clicar em SEGUIR) */
-.btn--follow.is-following {
-  background: var(--black);
-  color: var(--white);
-}
-
-.btn--follow.is-following:hover {
-  background: #1a1a1a;
 }
 
 /* =====================================================
@@ -731,8 +695,6 @@ body {
 /* Fallback: navegadores sem suporte a container query units (cqw) */
 @supports not (font-size: 1cqw) {
   .banner__label,
-  .stat__value,
-  .stat__label,
   .btn,
   .tabs__tab {
     font-size: clamp(11px, 3vw, 12.216px);
