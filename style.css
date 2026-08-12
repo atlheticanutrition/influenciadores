@@ -71,10 +71,14 @@ body {
   overscroll-behavior-y: contain;
 }
 
-/* A partir daqui já não é mais "a tela de um celular real" (telas maiores
-   que a maioria dos smartphones) — some com o edge-to-edge e mostra a
-   moldura, para não esticar o layout de 430px numa janela enorme. */
-@media (min-width: 481px) {
+/* A moldura/cartão só aparece em desktop de verdade — mouse (pointer: fine)
+   e hover disponível. Checar só a largura não bastava: alguns navegadores
+   in-app (WhatsApp, Instagram etc.) e celulares em paisagem/phablets
+   relatam uma largura de viewport maior que 481px, o que fazia o app
+   "encolher" dentro de um cartão em vez de ocupar a tela toda. Em qualquer
+   aparelho com toque, o conteúdo agora é sempre edge-to-edge — cara de app
+   instalado de verdade. */
+@media (min-width: 481px) and (hover: hover) and (pointer: fine) {
   .page {
     display: flex;
     align-items: center;
@@ -556,9 +560,9 @@ body {
   transform: scale(1);
 }
 
-/* Mesmo critério do .phone-frame: em telas maiores que um celular, o
-   modal também vira um cartão com moldura em vez de esticar em tela cheia. */
-@media (min-width: 481px) {
+/* Mesmo critério do .phone-frame (só desktop com mouse ganha moldura —
+   ver comentário lá em cima). Em qualquer celular o story ocupa a tela toda. */
+@media (min-width: 481px) and (hover: hover) and (pointer: fine) {
   .story-modal__card {
     height: min(844px, calc(100dvh - 48px));
     border-radius: 20px;
