@@ -1,11 +1,10 @@
 /**
  * Creatinas — Profile Header
- * Interações: botão de mensagem.
+ * Interações: seleção de marca (bolinhas) e abas Posts/Reels.
  */
 (() => {
   'use strict';
 
-  const messageBtn = document.getElementById('messageBtn');
   const toast = document.getElementById('toast');
 
   let toastTimer = null;
@@ -17,28 +16,58 @@
     toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2400);
   };
 
-  messageBtn.addEventListener('click', () => {
-    showToast('Abrindo mensagens com @creatinas…');
-  });
-
   /* =====================================================
-     Categories Row — seleção de categoria
+     Categories Row + Photo Grid — cada bolinha é uma marca;
+     clicar nela filtra o grid pra mostrar só os posts dela.
      ===================================================== */
 
-  document.querySelectorAll('.category').forEach((category) => {
+  const categories = Array.from(document.querySelectorAll('.category'));
+  const tabs = Array.from(document.querySelectorAll('.tabs__tab'));
+  const tabsIndicator = document.getElementById('tabsIndicator');
+  const photoGrid = document.querySelector('.photo-grid');
+  const photos = photoGrid ? Array.from(photoGrid.querySelectorAll('.photo')) : [];
+  const gridEmpty = document.getElementById('gridEmpty');
+
+  let activeCategory =
+    categories.find((c) => c.classList.contains('is-active'))?.dataset.category ??
+    categories[0]?.dataset.category;
+
+  // Mostra só os posts da marca selecionada. Se a marca ainda não tiver
+  // nenhuma publicação nesta prévia, troca o grid pelo aviso "em breve"
+  // em vez de deixar a tela em branco.
+  const updateGrid = () => {
+    if (!photoGrid) return;
+
+    const isReels = tabs.find((t) => t.classList.contains('is-active'))?.dataset.tab === 'reels';
+    if (isReels) {
+      photoGrid.style.display = 'none';
+      if (gridEmpty) gridEmpty.hidden = true;
+      return;
+    }
+
+    let visibleCount = 0;
+    photos.forEach((photo) => {
+      const matches = photo.dataset.category === activeCategory;
+      photo.style.display = matches ? '' : 'none';
+      if (matches) visibleCount += 1;
+    });
+
+    photoGrid.style.display = visibleCount > 0 ? 'grid' : 'none';
+    if (gridEmpty) gridEmpty.hidden = visibleCount > 0;
+  };
+
+  categories.forEach((category) => {
     category.addEventListener('click', () => {
-      const label = category.querySelector('.category__label')?.textContent ?? '';
-      showToast(`Categoria selecionada: ${label}`);
+      if (category.dataset.category === activeCategory) return;
+      activeCategory = category.dataset.category;
+      categories.forEach((c) => c.classList.toggle('is-active', c === category));
+      updateGrid();
     });
   });
 
   /* =====================================================
      Tabs — Posts / Reels
      ===================================================== */
-
-  const tabs = Array.from(document.querySelectorAll('.tabs__tab'));
-  const tabsIndicator = document.getElementById('tabsIndicator');
-  const photoGrid = document.querySelector('.photo-grid');
 
   const activateTab = (tab) => {
     tabs.forEach((t) => t.classList.toggle('is-active', t === tab));
@@ -48,11 +77,8 @@
       tabsIndicator.style.width = `${tab.offsetWidth}px`;
     }
 
-    const isReels = tab.dataset.tab === 'reels';
-    if (photoGrid) {
-      photoGrid.style.display = isReels ? 'none' : 'grid';
-    }
-    if (isReels) {
+    updateGrid();
+    if (tab.dataset.tab === 'reels') {
       showToast('Reels em breve nesta prévia.');
     }
   };
@@ -65,6 +91,8 @@
   if (initialTab && tabsIndicator) {
     // Aguarda o layout (fontes/imagens) para medir a posição real da aba.
     requestAnimationFrame(() => activateTab(initialTab));
+  } else {
+    updateGrid();
   }
 
   /* =====================================================
