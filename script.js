@@ -73,6 +73,7 @@
 
   const storyModal = document.getElementById('storyModal');
   const storyImage = document.getElementById('storyImage');
+  const storyBg = document.getElementById('storyBg');
   const storyProgress = document.getElementById('storyProgress');
   const storyStage = document.querySelector('.story-modal__stage');
   const storyCloseBtn = document.getElementById('storyCloseBtn');
@@ -144,6 +145,7 @@
       if (!post) return;
       storyImage.src = post.src;
       storyImage.alt = post.alt;
+      if (storyBg) storyBg.src = post.src;
       updateSegments();
       playActiveSegment();
     };
