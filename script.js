@@ -118,7 +118,6 @@
   const storyProgress = document.getElementById('storyProgress');
   const storyStage = document.querySelector('.story-modal__stage');
   const storyCloseBtn = document.getElementById('storyCloseBtn');
-  const storyMoreBtn = document.getElementById('storyMoreBtn');
   const storyPrevBtn = document.getElementById('storyPrevBtn');
   const storyNextBtn = document.getElementById('storyNextBtn');
 
@@ -257,9 +256,7 @@
     storyPrevBtn?.addEventListener('click', () => goTo(-1));
     storyNextBtn?.addEventListener('click', () => goTo(1));
 
-    storyMoreBtn?.addEventListener('click', () => showToast('Mais opções em breve.'));
-
-    // Segurar em qualquer ponto do palco (imagem ou áreas de navegação) pausa;
+// Segurar em qualquer ponto do palco (imagem ou áreas de navegação) pausa;
     // soltar, sair da área ou cancelar o toque retoma de onde parou.
     if (storyStage) {
       storyStage.addEventListener('pointerdown', pauseStory);
