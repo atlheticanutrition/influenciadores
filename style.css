@@ -23,6 +23,15 @@ html, body {
   padding: 0;
 }
 
+/* No celular quem rola é a própria página (ver .phone-frame). "proximity"
+   (não "mandatory") deixa o scroll livre em todo o resto da tela e só
+   ajuda a fileira do grid a "encaixar" quando o gesto termina perto dela —
+   sem forçar pulos estranhos ao rolar pelo cabeçalho/categorias, onde não
+   há pontos de encaixe definidos. */
+html {
+  scroll-snap-type: y proximity;
+}
+
 body {
   font-family: 'Chakra Petch', sans-serif;
   background: var(--page-bg);
@@ -101,6 +110,10 @@ body {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
+    /* Aqui é essa div (não a página) que rola de verdade, então o encaixe
+       do grid precisa estar nela — o "scroll-snap-type: y" do <html> não
+       tem efeito num elemento que nem chega a rolar. */
+    scroll-snap-type: y proximity;
   }
 }
 
@@ -409,39 +422,29 @@ body {
    Photo Grid
    ===================================================== */
 
+/* Grid uniforme (3 colunas, todas as fileiras com a mesma altura) — troca
+   o layout tipo Pinterest (colunas independentes com fotos quadradas e
+   retangulares misturadas) por fileiras alinhadas, necessário pro scroll
+   "encaixar" fileira por fileira sem nunca cortar um card na metade. */
 .photo-grid {
-  display: flex;
-  gap: 2.093%;                  /* 9 / 430 */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.3256cqw;                /* 10 / 430 */
   padding: 0 3.2558%;
   margin-top: 3.2558%;          /* 14 / 430 */
-}
-
-.photo-grid__column {
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  /* cqw, não % — a coluna tem altura intrínseca (auto), e um row-gap em %
-     dentro de um eixo principal de altura indefinida é mal resolvido pelo
-     navegador (a última imagem "vaza" para fora da caixa da coluna). cqw
-     sempre resolve contra a largura estável do .phone-frame. */
-  gap: 2.3256cqw;                /* 10 / 430 */
 }
 
 .photo {
   display: block;
   width: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: clamp(10px, 4.65cqw, 20px);
   background: var(--gray-bg);
-}
-
-.photo--sq {
-  aspect-ratio: 130 / 126;
-}
-
-.photo--tall {
-  aspect-ratio: 130 / 172;
+  /* Ponto de encaixe do scroll: toda foto da mesma fileira começa no mesmo
+     topo, então basta um scroll-snap-align por card pra fileira inteira
+     virar um ponto de parada. */
+  scroll-snap-align: start;
 }
 
 /* =====================================================
@@ -753,7 +756,7 @@ body {
     gap: 24vw;
   }
 
-  .photo-grid__column {
+  .photo-grid {
     gap: 10px;
   }
 

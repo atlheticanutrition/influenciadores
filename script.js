@@ -50,7 +50,7 @@
 
     const isReels = tab.dataset.tab === 'reels';
     if (photoGrid) {
-      photoGrid.style.display = isReels ? 'none' : 'flex';
+      photoGrid.style.display = isReels ? 'none' : 'grid';
     }
     if (isReels) {
       showToast('Reels em breve nesta prévia.');
