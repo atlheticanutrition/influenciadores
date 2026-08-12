@@ -430,7 +430,7 @@ body {
 .photo {
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 800 / 1027;
   object-fit: cover;
   border-radius: clamp(10px, 4.65cqw, 20px);
   background: var(--gray-bg);
