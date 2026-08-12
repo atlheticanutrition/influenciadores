@@ -212,12 +212,22 @@ body {
    Categories Row
    ===================================================== */
 
+.categories-hint {
+  margin: 4.4186% 0 0;        /* 19 / 430 — mesmo respiro que a fileira tinha antes */
+  padding: 0 3.2558%;         /* 14 / 430 */
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 500;
+  font-size: clamp(11px, 3.1cqw, 12px);
+  color: var(--cinza-400, #666666);
+  text-align: center;
+}
+
 .categories-row {
   display: flex;
   align-items: flex-start;
   gap: 2.7907%;               /* 12 / 430 */
   padding: 0 3.2558%;         /* 14 / 430 */
-  margin-top: 4.4186%;        /* 19 / 430 */
+  margin-top: 2.7907%;        /* 12 / 430 — respiro entre o aviso e as bolinhas */
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -691,6 +701,10 @@ body {
   .banner__label,
   .tabs__tab {
     font-size: clamp(11px, 3vw, 12.216px);
+  }
+
+  .categories-hint {
+    font-size: clamp(11px, 2.8vw, 12px);
   }
 
   .category__label {
