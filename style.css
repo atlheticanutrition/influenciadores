@@ -218,19 +218,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.86%;                  /* 8 / 430 */
-  margin: 4.4186% 3.2558% 0;   /* mesmo respiro horizontal do categories-hint (14 / 430) */
-  padding: 0.75em 1em;
-  border-radius: 10px;
+  gap: 1.4%;                   /* 6 / 430 */
+  width: fit-content;
+  margin: 4.4186% auto 0;      /* auto nas laterais: centraliza em vez de esticar */
+  padding: 0.45em 0.9em;
+  border-radius: 8px;
   border: 1.5px solid var(--black);
   background: #efefef;
   color: var(--black);
   font-family: 'Chakra Petch', sans-serif;
   font-weight: 700;
-  font-size: clamp(11px, 3.3cqw, 13px);
+  font-size: clamp(10px, 2.8cqw, 11.5px);
   letter-spacing: 0.03em;
+  text-transform: uppercase;
   text-decoration: none;
   text-align: center;
+  white-space: nowrap;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.15s ease, background 0.15s ease;
@@ -246,8 +249,8 @@ body {
 }
 
 .whatsapp-cta__icon {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   display: block;
   flex-shrink: 0;
 }
