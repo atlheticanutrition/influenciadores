@@ -359,6 +359,11 @@ body {
   max-height: 100%;
 }
 
+.category__logo--performance {
+  max-width: 74%;
+  max-height: 74%;
+}
+
 .category__label {
   font-family: 'Chakra Petch', sans-serif;
   font-weight: 600;
