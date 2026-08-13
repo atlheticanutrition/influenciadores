@@ -283,8 +283,9 @@ body {
 .categories-row {
   display: flex;
   align-items: flex-start;
-  gap: 1.5%;
-  padding: 0 2.2%;
+  justify-content: center;
+  gap: 2.5%;
+  padding: 0 3%;
   margin-top: 2.7907%;        /* 12 / 430 — respiro entre o aviso e as bolinhas */
   overflow-x: auto;
   scrollbar-width: none;
@@ -297,7 +298,7 @@ body {
 
 .category {
   position: relative;
-  flex: 0 0 18%;
+  flex: 0 0 22%;
   aspect-ratio: 1 / 1;
   border: none;
   background: none;

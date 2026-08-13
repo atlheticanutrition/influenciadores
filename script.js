@@ -28,9 +28,11 @@
   const photos = photoGrid ? Array.from(photoGrid.querySelectorAll('.photo')) : [];
   const gridEmpty = document.getElementById('gridEmpty');
 
+  // "creatinas" é a marca desta prévia — mesmo sem bolinha própria na
+  // fileira (removida), é ela que o grid mostra por padrão ao carregar.
   let activeCategory =
     categories.find((c) => c.classList.contains('is-active'))?.dataset.category ??
-    categories[0]?.dataset.category;
+    'creatinas';
 
   // Mostra só os posts da marca selecionada. Se a marca ainda não tiver
   // nenhuma publicação nesta prévia, troca o grid pelo aviso "em breve"
