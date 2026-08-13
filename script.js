@@ -30,7 +30,7 @@
   const tabs = Array.from(document.querySelectorAll('.tabs__tab'));
   const tabsIndicator = document.getElementById('tabsIndicator');
   const photoGrid = document.querySelector('.photo-grid');
-  const photos = photoGrid ? Array.from(photoGrid.querySelectorAll('.photo')) : [];
+  const photoCards = photoGrid ? Array.from(photoGrid.querySelectorAll('.photo-card')) : [];
   const gridEmpty = document.getElementById('gridEmpty');
 
   // "creatinas" é a marca desta prévia — mesmo sem bolinha própria na
@@ -39,29 +39,93 @@
     brandSelectors.find((c) => c.classList.contains('is-active'))?.dataset.category ??
     'creatinas';
 
-  // Mostra só os posts da marca selecionada. Se a marca ainda não tiver
-  // nenhuma publicação nesta prévia, troca o grid pelo aviso "em breve"
-  // em vez de deixar a tela em branco.
+  /* =====================================================
+     Salvos — bandeirinha em cada card guarda/remove a publicação
+     de uma lista persistida no navegador (localStorage), acessível
+     pela aba SALVOS ao lado de REELS.
+     ===================================================== */
+
+  const SAVED_STORAGE_KEY = 'creatinas-saved-posts';
+
+  const loadSavedIndices = () => {
+    try {
+      const stored = JSON.parse(localStorage.getItem(SAVED_STORAGE_KEY) || '[]');
+      return new Set(Array.isArray(stored) ? stored : []);
+    } catch (err) {
+      return new Set();
+    }
+  };
+
+  const savedIndices = loadSavedIndices();
+
+  const persistSavedIndices = () => {
+    try {
+      localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify(Array.from(savedIndices)));
+    } catch (err) {
+      // localStorage indisponível (ex: modo privado) — segue só na sessão atual.
+    }
+  };
+
+  // Mostra só os posts da marca selecionada (aba Posts) ou só os salvos
+  // (aba Salvos). Se não houver nenhum, troca o grid por um aviso em vez
+  // de deixar a tela em branco.
   const updateGrid = () => {
     if (!photoGrid) return;
 
-    const isReels = tabs.find((t) => t.classList.contains('is-active'))?.dataset.tab === 'reels';
-    if (isReels) {
+    const activeTabName = tabs.find((t) => t.classList.contains('is-active'))?.dataset.tab;
+
+    if (activeTabName === 'reels') {
       photoGrid.style.display = 'none';
       if (gridEmpty) gridEmpty.hidden = true;
       return;
     }
 
+    const isSavedTab = activeTabName === 'saved';
     let visibleCount = 0;
-    photos.forEach((photo) => {
-      const matches = photo.dataset.category === activeCategory;
-      photo.style.display = matches ? '' : 'none';
+    photoCards.forEach((card) => {
+      const photo = card.querySelector('.photo');
+      if (!photo) return;
+      const matches = isSavedTab
+        ? savedIndices.has(photo.dataset.storyIndex)
+        : photo.dataset.category === activeCategory;
+      card.style.display = matches ? '' : 'none';
       if (matches) visibleCount += 1;
     });
 
     photoGrid.style.display = visibleCount > 0 ? 'grid' : 'none';
-    if (gridEmpty) gridEmpty.hidden = visibleCount > 0;
+    if (gridEmpty) {
+      gridEmpty.hidden = visibleCount > 0;
+      gridEmpty.textContent = isSavedTab
+        ? 'Você ainda não salvou nenhuma publicação.'
+        : 'Em breve, publicações dessa marca por aqui.';
+    }
   };
+
+  photoCards.forEach((card) => {
+    const photo = card.querySelector('.photo');
+    const saveBtn = card.querySelector('.photo-card__save');
+    if (!photo || !saveBtn) return;
+
+    const index = photo.dataset.storyIndex;
+    saveBtn.classList.toggle('is-saved', savedIndices.has(index));
+
+    saveBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const nowSaved = !savedIndices.has(index);
+      if (nowSaved) {
+        savedIndices.add(index);
+      } else {
+        savedIndices.delete(index);
+      }
+      saveBtn.classList.toggle('is-saved', nowSaved);
+      saveBtn.setAttribute('aria-label', nowSaved ? 'Remover dos salvos' : 'Salvar publicação');
+      persistSavedIndices();
+      showToast(nowSaved ? 'Publicação salva.' : 'Publicação removida dos salvos.');
+
+      const activeTabName = tabs.find((t) => t.classList.contains('is-active'))?.dataset.tab;
+      if (activeTabName === 'saved') updateGrid();
+    });
+  });
 
   brandSelectors.forEach((selector) => {
     selector.addEventListener('click', () => {
