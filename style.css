@@ -516,6 +516,14 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.footer__label:hover,
+.footer__label:focus-visible {
+  opacity: 0.8;
 }
 
 /* =====================================================
