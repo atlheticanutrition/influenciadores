@@ -841,29 +841,16 @@ body {
   padding: 0 4.4186% 0 5.1163%;
 }
 
-/* "Quadro" da publicação: recorte arredondado com a imagem real por cima
-   (sem cortar nada). Proporção travada em 9:16 (mesmo formato dos assets
-   story-N.png, 540×960): o quadro encolhe pra caber no espaço disponível
-   em vez de esticar pra outra proporção. */
-.story-modal__frame {
-  position: relative;
+/* Sem "quadro" fixo (era um recorte 9:16, tipo 1080x1920, com a imagem
+   encaixada dentro) — a imagem aparece sozinha, no próprio tamanho/
+   proporção, só encolhendo pra caber no espaço disponível. */
+.story-modal__image {
+  display: block;
   width: auto;
   height: auto;
   max-width: 100%;
   max-height: 100%;
-  aspect-ratio: 9 / 16;
   border-radius: 20px;
-  overflow: hidden;
-  background: #000;
-}
-
-.story-modal__image {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 .story-modal__nav {
@@ -871,8 +858,8 @@ body {
   top: 0;
   bottom: 0;
   width: 40%;
-  /* Acima do .story-modal__frame (também posicionado) pra continuar
-     recebendo o toque de avançar/voltar publicação. */
+  /* Acima da imagem pra continuar recebendo o toque de avançar/voltar
+     publicação. */
   z-index: 2;
   border: none;
   background: none;
