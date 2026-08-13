@@ -729,7 +729,7 @@ body {
 .story-modal__actions {
   display: flex;
   align-items: center;
-  gap: 7%;
+  gap: 14%;
   flex-shrink: 0;
 }
 
