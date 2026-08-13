@@ -111,6 +111,7 @@
   const storyBg = document.getElementById('storyBg');
   const storyProgress = document.getElementById('storyProgress');
   const storyStage = document.querySelector('.story-modal__stage');
+  const storyDownloadBtn = document.getElementById('storyDownloadBtn');
   const storyCloseBtn = document.getElementById('storyCloseBtn');
   const storyPrevBtn = document.getElementById('storyPrevBtn');
   const storyNextBtn = document.getElementById('storyNextBtn');
@@ -279,6 +280,29 @@
 
     storyPrevBtn?.addEventListener('click', () => goTo(-1));
     storyNextBtn?.addEventListener('click', () => goTo(1));
+
+    // Baixa a imagem da publicação aberta no momento. Busca como blob em
+    // vez de só apontar o href pro <a download> porque alguns navegadores
+    // ignoram o atributo "download" e abrem a imagem numa aba nova.
+    storyDownloadBtn?.addEventListener('click', async () => {
+      const src = storyImage.src;
+      if (!src) return;
+      const filename = src.split('/').pop().split('?')[0] || 'publicacao.png';
+      try {
+        const response = await fetch(src);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        window.open(src, '_blank');
+      }
+    });
 
 // Segurar em qualquer ponto do palco (imagem ou áreas de navegação) pausa;
     // soltar, sair da área ou cancelar o toque retoma de onde parou.
