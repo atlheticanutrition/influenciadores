@@ -169,6 +169,24 @@ body {
   width: 31.3953%;                /* 135 / 430 (caixa de padding do profile-header) */
   aspect-ratio: 1 / 1;
   z-index: 2;
+  /* Agora é um <button> (é ele quem leva o feed de Creatinas) — reseta
+     a aparência padrão de botão do navegador. */
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.avatar:active .avatar__img {
+  transform: scale(0.96);
+}
+
+/* Mesmo recurso visual das bolinhas de categoria: a argola apaga quando
+   essa é a marca selecionada no momento. */
+.avatar.is-active .avatar__ring {
+  opacity: 0.35;
+  transition: opacity 0.15s ease;
 }
 
 /* Argola gradiente por trás, igual às bolinhas de categoria — o avatar.svg
@@ -189,6 +207,7 @@ body {
   width: 100%;
   height: 100%;
   display: block;
+  transition: transform 0.15s ease;
 }
 
 /* =====================================================

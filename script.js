@@ -22,6 +22,11 @@
      ===================================================== */
 
   const categories = Array.from(document.querySelectorAll('.category'));
+  // O avatar principal (o maior, acima de tudo) também seleciona marca —
+  // é ele quem carrega o feed de Creatinas agora que a bolinha própria
+  // dela foi removida da fileira.
+  const avatarButton = document.querySelector('.avatar');
+  const brandSelectors = avatarButton ? [avatarButton, ...categories] : categories;
   const tabs = Array.from(document.querySelectorAll('.tabs__tab'));
   const tabsIndicator = document.getElementById('tabsIndicator');
   const photoGrid = document.querySelector('.photo-grid');
@@ -31,7 +36,7 @@
   // "creatinas" é a marca desta prévia — mesmo sem bolinha própria na
   // fileira (removida), é ela que o grid mostra por padrão ao carregar.
   let activeCategory =
-    categories.find((c) => c.classList.contains('is-active'))?.dataset.category ??
+    brandSelectors.find((c) => c.classList.contains('is-active'))?.dataset.category ??
     'creatinas';
 
   // Mostra só os posts da marca selecionada. Se a marca ainda não tiver
@@ -58,11 +63,11 @@
     if (gridEmpty) gridEmpty.hidden = visibleCount > 0;
   };
 
-  categories.forEach((category) => {
-    category.addEventListener('click', () => {
-      if (category.dataset.category === activeCategory) return;
-      activeCategory = category.dataset.category;
-      categories.forEach((c) => c.classList.toggle('is-active', c === category));
+  brandSelectors.forEach((selector) => {
+    selector.addEventListener('click', () => {
+      if (selector.dataset.category === activeCategory) return;
+      activeCategory = selector.dataset.category;
+      brandSelectors.forEach((s) => s.classList.toggle('is-active', s === selector));
       updateGrid();
     });
   });
