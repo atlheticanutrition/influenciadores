@@ -147,14 +147,32 @@ body {
 
 .banner__label {
   position: absolute;
-  top: 43.3%;
+  top: 50%;
   right: 4.5%;
-  font-weight: 600;
-  font-size: clamp(11px, 3.4cqw, 12.216px);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   color: var(--white);
-  letter-spacing: 0.02em;
-  white-space: nowrap;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.banner__label-line {
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.banner__label-line--thin {
+  font-weight: 400;
+  font-size: clamp(10px, 3cqw, 13px);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2em;
+}
+
+.banner__label-line--bold {
+  font-weight: 700;
+  font-size: clamp(19px, 6.3cqw, 27px);
+  letter-spacing: 0.01em;
 }
 
 /* ---------- Avatar (sobrepõe banner + linha de estatísticas) ---------- */
