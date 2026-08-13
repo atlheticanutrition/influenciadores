@@ -654,6 +654,17 @@ body {
   background: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* O X ganha foco por script ao abrir o story (pra quem navega pelo
+   teclado/leitor de tela), o que fazia o navegador desenhar o retângulo
+   azul padrão por cima do círculo branco do botão. Troca por um anel
+   discreto e redondo, no mesmo tom do resto do app. */
+.story-modal__icon-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 3px;
+  border-radius: 50%;
 }
 
 /* Botão de fechar maior — mais fácil de mirar e mais visível, já que agora
@@ -735,6 +746,12 @@ body {
   padding: 0;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.story-modal__nav:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: -4px;
 }
 
 .story-modal__nav--prev {
