@@ -633,6 +633,9 @@ body {
 
 .story-modal__stage {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1 1 auto;
   min-height: 0;
   margin-top: 3.6365%;           /* "Spacer" antes do conteúdo */
@@ -641,11 +644,18 @@ body {
 
 /* "Quadro" da publicação: recorte arredondado que contém o fundo desfocado
    (preenche 100%, sem barra preta) e a imagem real por cima (sem cortar
-   nada) — mesma técnica usada pelos Stories reais do Instagram. */
+   nada) — mesma técnica usada pelos Stories reais do Instagram.
+   Proporção travada em 9:16 (mesmo formato dos assets story-N.png,
+   540×960): o quadro encolhe pra caber no espaço disponível em vez de
+   esticar pra outra proporção — assim a imagem sempre preenche 100% do
+   quadro, sem sobrar barra/fundo desfocado nas laterais nem em cima/baixo. */
 .story-modal__frame {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 9 / 16;
   border-radius: 20px;
   overflow: hidden;
   background: #000;
