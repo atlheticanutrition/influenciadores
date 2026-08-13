@@ -367,7 +367,7 @@ body {
 /* A "cauda" do cursivo do "Vegan" puxa o peso visual pra baixo — a
    marca lê como descentralizada mesmo com a caixa delimitadora certa. */
 .category__logo--vegan {
-  transform: translateY(-8%);
+  transform: translateY(4%);
 }
 
 .category__label {
