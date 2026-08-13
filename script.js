@@ -111,6 +111,7 @@
   const storyBg = document.getElementById('storyBg');
   const storyProgress = document.getElementById('storyProgress');
   const storyStage = document.querySelector('.story-modal__stage');
+  const storyCard = document.querySelector('.story-modal__card');
   const storyDownloadBtn = document.getElementById('storyDownloadBtn');
   const storyCloseBtn = document.getElementById('storyCloseBtn');
   const storyPrevBtn = document.getElementById('storyPrevBtn');
@@ -247,7 +248,10 @@
       storyModal.classList.add('is-open');
       storyModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      storyCloseBtn?.focus();
+      // Foca o card (não o botão de fechar) — move o foco pra dentro do
+      // modal para teclado/leitor de tela sem acender o anel de foco em
+      // cima do X, que ficava com uma borda mais grossa que o normal.
+      storyCard?.focus();
     };
 
     const closeStory = () => {
