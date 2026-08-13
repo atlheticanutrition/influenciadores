@@ -66,6 +66,14 @@
     }
   };
 
+  const savedBadge = document.getElementById('savedBadge');
+  const updateSavedBadge = () => {
+    if (!savedBadge) return;
+    savedBadge.textContent = String(savedIndices.size);
+    savedBadge.hidden = savedIndices.size === 0;
+  };
+  updateSavedBadge();
+
   // Mostra só os posts da marca selecionada (aba Posts) ou só os salvos
   // (aba Salvos). Se não houver nenhum, troca o grid por um aviso em vez
   // de deixar a tela em branco.
@@ -120,6 +128,7 @@
       saveBtn.classList.toggle('is-saved', nowSaved);
       saveBtn.setAttribute('aria-label', nowSaved ? 'Remover dos salvos' : 'Salvar publicação');
       persistSavedIndices();
+      updateSavedBadge();
       showToast(nowSaved ? 'Publicação salva.' : 'Publicação removida dos salvos.');
 
       const activeTabName = tabs.find((t) => t.classList.contains('is-active'))?.dataset.tab;

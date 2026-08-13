@@ -471,6 +471,7 @@ body {
 }
 
 .tabs__tab {
+  position: relative;
   background: none;
   border: none;
   padding: 0;
@@ -486,6 +487,25 @@ body {
 
 .tabs__tab.is-active {
   font-weight: 600;
+}
+
+/* Contador de publicações salvas — só aparece quando há pelo menos uma. */
+.tabs__badge {
+  position: absolute;
+  top: -0.6em;
+  right: -1em;
+  min-width: 1.5em;
+  height: 1.5em;
+  padding: 0 0.4em;
+  border-radius: 999px;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: 0.75em;
+  line-height: 1.5em;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 /* =====================================================
