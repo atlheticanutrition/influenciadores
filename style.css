@@ -124,7 +124,7 @@ body {
   /* Sem a actions-row, esse respiro é o que impede o avatar (que se
      sobrepõe ao fim do banner) de cobrir a linha de categorias logo
      abaixo — mesmo valor que a antiga actions-row usava de padding-top. */
-  padding-bottom: 19.6517%;
+  padding-bottom: 16%;
 }
 
 /* ---------- Banner ---------- */
@@ -132,7 +132,7 @@ body {
 .banner {
   position: relative;
   width: 100%;
-  aspect-ratio: 402 / 140.983;  /* proporção exata do banner no Figma */
+  aspect-ratio: 402 / 190;
   overflow: hidden;
 }
 
@@ -163,7 +163,7 @@ body {
   position: absolute;
   /* Posicionado em relação ao .profile-header (não ao fluxo), para que o
      círculo flutue sobre o banner/stats sem empurrar os botões abaixo dele. */
-  top: 16.2791cqw;                /* 70 / 430 */
+  top: 24cqw;
   left: 50%;
   transform: translateX(-50%);
   width: 31.3953%;                /* 135 / 430 (caixa de padding do profile-header) */
