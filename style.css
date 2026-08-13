@@ -364,6 +364,12 @@ body {
   max-height: 74%;
 }
 
+/* A "cauda" do cursivo do "Vegan" puxa o peso visual pra baixo — a
+   marca lê como descentralizada mesmo com a caixa delimitadora certa. */
+.category__logo--vegan {
+  transform: translateY(-8%);
+}
+
 .category__label {
   font-family: 'Chakra Petch', sans-serif;
   font-weight: 600;
