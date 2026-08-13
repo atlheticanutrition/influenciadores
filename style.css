@@ -838,19 +838,16 @@ body {
   flex: 1 1 auto;
   min-height: 0;
   margin-top: 3.6365%;           /* "Spacer" antes do conteúdo */
-  padding: 0 4.4186% 0 5.1163%;
 }
 
 /* Sem "quadro" fixo (era um recorte 9:16, tipo 1080x1920, com a imagem
-   encaixada dentro) — a imagem aparece sozinha, no próprio tamanho/
-   proporção, só encolhendo pra caber no espaço disponível. */
+   encaixada dentro) — a imagem aparece sozinha, ocupando a largura
+   inteira da tela, sem cantos arredondados. */
 .story-modal__image {
   display: block;
-  width: auto;
+  width: 100%;
   height: auto;
-  max-width: 100%;
   max-height: 100%;
-  border-radius: 20px;
 }
 
 .story-modal__nav {
