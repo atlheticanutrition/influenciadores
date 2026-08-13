@@ -171,8 +171,17 @@ body {
 
 .banner__label-line--bold {
   font-weight: 700;
-  font-size: clamp(19px, 6.3cqw, 27px);
-  letter-spacing: 0.01em;
+  font-size: clamp(10px, 3cqw, 13px);
+}
+
+/* Letter-spacing calibrado por palavra pra "justificar" o bloco: cada
+   linha estica até ficar com a mesma largura de "WE KNOW" (a mais larga). */
+.banner__label-line--about {
+  letter-spacing: 0.308em;
+}
+
+.banner__label-line--taste {
+  letter-spacing: 0.385em;
 }
 
 /* ---------- Avatar (sobrepõe banner + linha de estatísticas) ---------- */
