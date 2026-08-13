@@ -725,9 +725,10 @@ body {
   border-radius: 50%;
 }
 
-/* Botão de fechar maior — mais fácil de mirar e mais visível, já que agora
-   é a única ação do cabeçalho (os "..." de mais opções foram removidos). */
-.story-modal__icon-btn--close {
+/* Baixar e fechar do mesmo tamanho — mesma "importância" visual no
+   cabeçalho, lado a lado. */
+.story-modal__icon-btn--close,
+.story-modal__icon-btn--download {
   width: clamp(24px, 7cqw, 30px);
   height: clamp(24px, 7cqw, 30px);
 }
@@ -857,7 +858,8 @@ body {
     height: 16px;
   }
 
-  .story-modal__icon-btn--close {
+  .story-modal__icon-btn--close,
+  .story-modal__icon-btn--download {
     width: 28px;
     height: 28px;
   }
