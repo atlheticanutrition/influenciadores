@@ -212,6 +212,46 @@ body {
    Categories Row
    ===================================================== */
 
+/* ---------- CTA "Fale Conosco" (WhatsApp) ---------- */
+
+.whatsapp-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.86%;                  /* 8 / 430 */
+  margin: 4.4186% 3.2558% 0;   /* mesmo respiro horizontal do categories-hint (14 / 430) */
+  padding: 0.75em 1em;
+  border-radius: 999px;
+  border: none;
+  background: #25d366;         /* verde oficial do WhatsApp */
+  color: var(--white);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 3.3cqw, 13px);
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.whatsapp-cta:hover,
+.whatsapp-cta:focus-visible {
+  background: #1fb959;
+}
+
+.whatsapp-cta:active {
+  transform: scale(0.97);
+}
+
+.whatsapp-cta__icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+
 .categories-hint {
   margin: 4.4186% 0 0;        /* 19 / 430 — mesmo respiro que a fileira tinha antes */
   padding: 0 3.2558%;         /* 14 / 430 */
