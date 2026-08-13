@@ -263,6 +263,7 @@ body {
   font-size: clamp(11px, 3.1cqw, 12px);
   color: var(--cinza-400, #666666);
   text-align: center;
+  text-transform: uppercase;
 }
 
 .categories-row {
@@ -405,13 +406,6 @@ body {
 
 .tabs__tab.is-active {
   font-weight: 600;
-}
-
-.tabs__icons {
-  display: block;
-  width: clamp(20px, 5.77cqw, 24.793px);
-  height: auto;
-  align-self: center;
 }
 
 /* =====================================================
@@ -783,10 +777,6 @@ body {
 
   .footer__label {
     font-size: clamp(6.5px, 1.6vw, 7.576px);
-  }
-
-  .tabs__icons {
-    width: 24.793px;
   }
 
   .tabs__labels {
