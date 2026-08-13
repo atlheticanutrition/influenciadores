@@ -221,10 +221,10 @@ body {
   gap: 1.86%;                  /* 8 / 430 */
   margin: 4.4186% 3.2558% 0;   /* mesmo respiro horizontal do categories-hint (14 / 430) */
   padding: 0.75em 1em;
-  border-radius: 999px;
-  border: none;
-  background: #25d366;         /* verde oficial do WhatsApp */
-  color: var(--white);
+  border-radius: 10px;
+  border: 1.5px solid var(--black);
+  background: #efefef;
+  color: var(--black);
   font-family: 'Chakra Petch', sans-serif;
   font-weight: 700;
   font-size: clamp(11px, 3.3cqw, 13px);
@@ -238,7 +238,7 @@ body {
 
 .whatsapp-cta:hover,
 .whatsapp-cta:focus-visible {
-  background: #1fb959;
+  background: #e2e2e2;
 }
 
 .whatsapp-cta:active {
