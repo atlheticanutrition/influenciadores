@@ -839,34 +839,12 @@ body {
   min-height: 0;
   margin-top: 3.6365%;           /* "Spacer" antes do conteúdo */
   padding: 0 4.4186% 0 5.1163%;
-  /* Recorta o fundo desfocado (ver .story-modal__bg) nas bordas do palco,
-     já que ele agora estica além da própria caixa pra esconder o
-     desbotado que o blur deixa na margem. */
-  overflow: hidden;
-}
-
-/* Fundo desfocado: preenche o palco inteiro, de ponta a ponta (sem as
-   barras/sobras que ficavam só dentro do quadro) — o "resto de tela"
-   ao redor da publicação vira tela cheia, sem esticar a imagem real. */
-.story-modal__bg {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: blur(30px) brightness(0.55);
-  /* escala pra esconder a borda "desbotada" que o blur deixa nas margens */
-  transform: scale(1.15);
 }
 
 /* "Quadro" da publicação: recorte arredondado com a imagem real por cima
-   (sem cortar nada), flutuando por cima do fundo desfocado — mesma
-   técnica usada pelos Stories reais do Instagram.
-   Proporção travada em 9:16 (mesmo formato dos assets story-N.png,
-   540×960): o quadro encolhe pra caber no espaço disponível em vez de
-   esticar pra outra proporção, então o TAMANHO da imagem não muda —
-   só o fundo ao redor dela agora vai até a borda da tela. */
+   (sem cortar nada). Proporção travada em 9:16 (mesmo formato dos assets
+   story-N.png, 540×960): o quadro encolhe pra caber no espaço disponível
+   em vez de esticar pra outra proporção. */
 .story-modal__frame {
   position: relative;
   width: auto;
@@ -876,10 +854,7 @@ body {
   aspect-ratio: 9 / 16;
   border-radius: 20px;
   overflow: hidden;
-  /* Transparente de propósito: onde a imagem (contain) não preenche o
-     quadro 9:16 (ex: fotos 4:5), o fundo desfocado do palco aparece por
-     trás em vez de uma barra preta sólida — fica tudo contínuo. */
-  background: none;
+  background: #000;
 }
 
 .story-modal__image {

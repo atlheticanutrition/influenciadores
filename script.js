@@ -181,7 +181,6 @@
 
   const storyModal = document.getElementById('storyModal');
   const storyImage = document.getElementById('storyImage');
-  const storyBg = document.getElementById('storyBg');
   const storyProgress = document.getElementById('storyProgress');
   const storyStage = document.querySelector('.story-modal__stage');
   const storyCard = document.querySelector('.story-modal__card');
@@ -269,11 +268,6 @@
         storyImage.src = storyImage.dataset.fallback;
       }
     });
-    storyBg?.addEventListener('error', () => {
-      if (storyBg.dataset.fallback && storyBg.src !== storyBg.dataset.fallback) {
-        storyBg.src = storyBg.dataset.fallback;
-      }
-    });
 
     const renderSlide = () => {
       const post = posts[currentIndex];
@@ -281,10 +275,6 @@
       storyImage.dataset.fallback = post.fallbackSrc;
       storyImage.src = post.src;
       storyImage.alt = post.alt;
-      if (storyBg) {
-        storyBg.dataset.fallback = post.fallbackSrc;
-        storyBg.src = post.src;
-      }
       updateSegments();
       playActiveSegment();
     };
