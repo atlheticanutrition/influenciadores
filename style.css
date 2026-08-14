@@ -535,7 +535,7 @@ body {
 
 .photo-card {
   position: relative;
-  border-radius: clamp(10px, 4.65cqw, 20px);
+  border-radius: clamp(4px, 1.86cqw, 8px);
   overflow: hidden;
   background: var(--gray-bg);
 }
@@ -585,7 +585,7 @@ body {
 .grid-empty {
   margin: 12% 3.2558% 0;
   padding: 15% 8%;
-  border-radius: clamp(10px, 4.65cqw, 20px);
+  border-radius: clamp(4px, 1.86cqw, 8px);
   background: var(--gray-bg);
   color: var(--cinza-400, #666666);
   font-family: 'Chakra Petch', sans-serif;
