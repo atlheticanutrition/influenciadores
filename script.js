@@ -27,6 +27,27 @@
   // dela foi removida da fileira.
   const avatarButton = document.querySelector('.avatar');
   const brandSelectors = avatarButton ? [avatarButton, ...categories] : categories;
+
+  // Nome exibido no cabeçalho do Story Viewer para cada marca — usa
+  // data-story-name quando definido (ex: Carnitech, cujo data-category
+  // "best-whey" não é o nome de exibição), senão o próprio data-category
+  // em caixa alta (ex: "creatinas" -> "CREATINAS").
+  const categoryStoryNames = new Map(
+    brandSelectors.map((selector) => [
+      selector.dataset.category,
+      selector.dataset.storyName || (selector.dataset.category || '').toUpperCase(),
+    ])
+  );
+  // Capa (banner do topo) — troca junto com a marca selecionada quando a
+  // bolinha tem data-banner-src (ex: Carnitech usa assets/bannertopo.png
+  // no lugar da capa padrão de Creatinas).
+  const bannerImg = document.getElementById('bannerImg');
+  const updateBanner = (selector) => {
+    if (!bannerImg || !selector?.dataset.bannerSrc) return;
+    bannerImg.src = selector.dataset.bannerSrc;
+    bannerImg.alt = selector.dataset.bannerAlt || bannerImg.alt;
+  };
+
   const tabs = Array.from(document.querySelectorAll('.tabs__tab'));
   const tabsIndicator = document.getElementById('tabsIndicator');
   const photoGrid = document.querySelector('.photo-grid');
@@ -141,6 +162,7 @@
       if (selector.dataset.category === activeCategory) return;
       activeCategory = selector.dataset.category;
       brandSelectors.forEach((s) => s.classList.toggle('is-active', s === selector));
+      updateBanner(selector);
       updateGrid();
     });
   });
@@ -181,6 +203,7 @@
 
   const storyModal = document.getElementById('storyModal');
   const storyImage = document.getElementById('storyImage');
+  const storyName = document.getElementById('storyName');
   const storyProgress = document.getElementById('storyProgress');
   const storyStage = document.querySelector('.story-modal__stage');
   const storyCard = document.querySelector('.story-modal__card');
@@ -204,6 +227,7 @@
             img.dataset.storyIndex,
             {
               index: img.dataset.storyIndex,
+              category: img.dataset.category,
               src: img.dataset.storySrc || gridSrc,
               fallbackSrc: gridSrc,
               alt: img.alt || `Publicação ${img.dataset.storyIndex}`,
@@ -219,16 +243,23 @@
     let lastTrigger = null;
     let advanceTimer = null;
     let isPaused = false;
+    // A publicação clicada define o grupo (marca) do story: abrir uma foto
+    // de Carnitech mostra só as publicações de Carnitech, não o feed todo.
+    let activePosts = posts;
+    let segments = [];
 
-    // Monta os segmentos da barra de progresso (um por publicação).
-    storyProgress.innerHTML = '';
-    const segments = posts.map(() => {
-      const segment = document.createElement('div');
-      segment.className = 'story-modal__segment';
-      segment.innerHTML = '<span></span>';
-      storyProgress.appendChild(segment);
-      return segment;
-    });
+    // (Re)monta os segmentos da barra de progresso — um por publicação do
+    // grupo ativo. Chamado toda vez que um story de uma marca é aberto.
+    const buildSegments = (count) => {
+      storyProgress.innerHTML = '';
+      segments = Array.from({ length: count }, () => {
+        const segment = document.createElement('div');
+        segment.className = 'story-modal__segment';
+        segment.innerHTML = '<span></span>';
+        storyProgress.appendChild(segment);
+        return segment;
+      });
+    };
 
     const clearAdvanceTimer = () => {
       if (advanceTimer) {
@@ -271,7 +302,7 @@
     });
 
     const renderSlide = () => {
-      const post = posts[currentIndex];
+      const post = activePosts[currentIndex];
       if (!post) return;
       storyImage.dataset.fallback = post.fallbackSrc;
       storyImage.src = post.src;
@@ -303,11 +334,17 @@
       advanceTimer = setTimeout(() => goTo(1), remaining);
     };
 
-    const openStory = (index, trigger) => {
-      currentIndex = ((index % posts.length) + posts.length) % posts.length;
+    const openStory = (postsGroup, index, trigger) => {
+      activePosts = postsGroup.length ? postsGroup : posts;
+      buildSegments(activePosts.length);
+      currentIndex = ((index % activePosts.length) + activePosts.length) % activePosts.length;
       lastTrigger = trigger ?? null;
       isPaused = false;
       storyModal.classList.remove('is-paused');
+      if (storyName) {
+        const category = activePosts[currentIndex]?.category;
+        storyName.textContent = categoryStoryNames.get(category) || (category || '').toUpperCase();
+      }
       renderSlide();
       storyModal.classList.add('is-open');
       storyModal.setAttribute('aria-hidden', 'false');
@@ -333,7 +370,7 @@
     };
 
     const goTo = (delta) => {
-      currentIndex = ((currentIndex + delta) % posts.length + posts.length) % posts.length;
+      currentIndex = ((currentIndex + delta) % activePosts.length + activePosts.length) % activePosts.length;
       isPaused = false;
       storyModal.classList.remove('is-paused');
       renderSlide();
@@ -342,8 +379,11 @@
     document.querySelectorAll('.photo[data-story-index]').forEach((img) => {
       img.style.cursor = 'zoom-in';
       img.addEventListener('click', () => {
-        const index = posts.findIndex((p) => p.index === img.dataset.storyIndex);
-        openStory(index === -1 ? 0 : index, img);
+        // Só as publicações da mesma marca da foto clicada entram nesse
+        // story — evita misturar Creatinas com Carnitech, por exemplo.
+        const groupPosts = posts.filter((p) => p.category === img.dataset.category);
+        const index = groupPosts.findIndex((p) => p.index === img.dataset.storyIndex);
+        openStory(groupPosts, index === -1 ? 0 : index, img);
       });
     });
 
