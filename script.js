@@ -207,7 +207,6 @@
   const storyProgress = document.getElementById('storyProgress');
   const storyStage = document.querySelector('.story-modal__stage');
   const storyCard = document.querySelector('.story-modal__card');
-  const storyBackdrop = document.querySelector('.story-modal__backdrop');
   const storyDownloadBtn = document.getElementById('storyDownloadBtn');
   const storyCloseBtn = document.getElementById('storyCloseBtn');
   const storyPrevBtn = document.getElementById('storyPrevBtn');
@@ -362,11 +361,11 @@
       storyModal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
       lastTrigger?.focus();
-      // Limpa qualquer transform/opacidade deixada pelo arrastar-pra-fechar,
-      // senão o card reabre já deslocado na próxima vez.
+      // Limpa qualquer transform/clip-path deixado pelo arrastar-pra-fechar,
+      // senão o card reabre já deslocado ou com a bola fechada na próxima vez.
       storyCard.style.transition = '';
       storyCard.style.transform = '';
-      if (storyBackdrop) storyBackdrop.style.opacity = '';
+      storyCard.style.clipPath = '';
     };
 
     const goTo = (delta) => {
@@ -419,28 +418,49 @@
 
     /* Segurar em qualquer ponto do palco (imagem ou áreas de navegação)
        pausa; soltar, sair da área ou cancelar o toque retoma de onde
-       parou. Arrastar pra baixo, junto disso, encolhe o card seguindo o
-       dedo — solta acima do limite fecha (gesto do Stories real). */
+       parou. Arrastar pra baixo, junto disso, fecha uma máscara circular
+       (clip-path) em torno do dedo — o card não se move nem encolhe
+       inteiro, só a "janela" por onde ele aparece vai fechando como uma
+       bola/íris. Solta acima do limite completa o fechamento; solta antes
+       reabre a bola de volta.
+       Compat.: clip-path animado não existe em navegadores muito antigos
+       (ex. IE) — nesses o card só some no fade padrão do modal, sem o
+       efeito extra, então nada quebra. */
     const DRAG_CLOSE_THRESHOLD = 110; // px arrastados pra soltar e fechar
+    const CLOSE_RADIUS_OPEN = 150; // % — cobre o card inteiro, sem cortar nada
+    const CLOSE_ANIMATION_MS = 220;
     let dragPointerId = null;
     let dragStartY = 0;
     let dragDeltaY = 0;
     let isDraggingToClose = false;
+    let dragCenterX = 50;
+    let dragCenterY = 50;
 
-    const applyDragTransform = (deltaY) => {
+    const applyDragTransform = (deltaY, clientX, clientY) => {
       const clamped = Math.max(deltaY, 0);
-      const scale = Math.max(1 - clamped / 2000, 0.85);
+      const rect = storyCard.getBoundingClientRect();
+      dragCenterX = ((clientX - rect.left) / rect.width) * 100;
+      dragCenterY = ((clientY - rect.top) / rect.height) * 100;
+      // A bola já fecha quase todo o caminho antes mesmo de cruzar o
+      // limite de soltar — o gesto inteiro fica visível, não só o final.
+      // O backdrop (cortina escura por trás) fica parado e sólido — é
+      // contra ele que a bola vai encolhendo, sem clarear.
+      const radius = Math.max(CLOSE_RADIUS_OPEN - clamped * 1.2, 0);
       storyCard.style.transition = 'none';
-      storyCard.style.transform = `translateY(${clamped}px) scale(${scale})`;
-      if (storyBackdrop) {
-        storyBackdrop.style.opacity = String(Math.max(1 - clamped / 400, 0.3));
-      }
+      storyCard.style.clipPath = `circle(${radius}% at ${dragCenterX}% ${dragCenterY}%)`;
     };
 
     const snapCardBack = () => {
-      storyCard.style.transition = 'transform 0.25s ease';
-      storyCard.style.transform = '';
-      if (storyBackdrop) storyBackdrop.style.opacity = '';
+      storyCard.style.transition = `clip-path ${CLOSE_ANIMATION_MS}ms ease`;
+      storyCard.style.clipPath = `circle(${CLOSE_RADIUS_OPEN}% at 50% 50%)`;
+    };
+
+    // Termina o gesto: fecha a bola até o raio zero no ponto onde soltou,
+    // e só desmonta o modal (closeStory) depois da animação terminar.
+    const collapseAndClose = () => {
+      storyCard.style.transition = `clip-path ${CLOSE_ANIMATION_MS}ms ease-in`;
+      storyCard.style.clipPath = `circle(0% at ${dragCenterX}% ${dragCenterY}%)`;
+      setTimeout(closeStory, CLOSE_ANIMATION_MS);
     };
 
     const handleStagePointerDown = (event) => {
@@ -462,21 +482,20 @@
         isDraggingToClose = true;
       }
       dragDeltaY = delta;
-      applyDragTransform(delta);
+      applyDragTransform(delta, event.clientX, event.clientY);
     };
 
     const endStageDrag = () => {
-      if (isDraggingToClose) {
-        if (dragDeltaY > DRAG_CLOSE_THRESHOLD) {
-          closeStory();
-        } else {
-          snapCardBack();
-        }
+      if (isDraggingToClose && dragDeltaY > DRAG_CLOSE_THRESHOLD) {
+        collapseAndClose();
+        // Não retoma a história: o modal está prestes a fechar de vez.
+      } else {
+        if (isDraggingToClose) snapCardBack();
+        resumeStory();
       }
       dragPointerId = null;
       isDraggingToClose = false;
       dragDeltaY = 0;
-      resumeStory();
     };
 
     if (storyStage) {

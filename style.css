@@ -681,7 +681,12 @@ body {
   padding: calc(4.6512% + env(safe-area-inset-top, 0px)) env(safe-area-inset-right, 0px)
            calc(5.1163% + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0px);
   transform: scale(0.98);
-  transition: transform 0.2s ease;
+  /* Máscara circular usada no arrastar-pra-fechar (ver script.js): 150%
+     cobre o card inteiro sem cortar nada — só encolhe quando o JS reduz
+     esse raio durante o gesto, dando o efeito de "bola fechando" em vez
+     de só deslizar a tela pra fora. */
+  clip-path: circle(150% at 50% 50%);
+  transition: transform 0.2s ease, clip-path 0.2s ease;
 
   /* Mesma técnica de escala fluida (cqw) do phone-frame */
   container-type: inline-size;
