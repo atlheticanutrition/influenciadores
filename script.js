@@ -60,6 +60,19 @@
     brandSelectors.find((c) => c.classList.contains('is-active'))?.dataset.category ??
     'creatinas';
 
+  // Sabores — a barra só aparece na marca indicada em data-category (Clear
+  // Juice); posts com data-flavor só entram no grid/story do sabor ativo.
+  const flavorBar = document.getElementById('flavorBar');
+  const flavorChips = flavorBar ? Array.from(flavorBar.querySelectorAll('.flavor-chip')) : [];
+  let activeFlavor = flavorChips.find((c) => c.classList.contains('is-active'))?.dataset.flavor ?? null;
+
+  const updateFlavorBar = () => {
+    if (flavorBar) flavorBar.hidden = activeCategory !== flavorBar.dataset.category;
+  };
+  updateFlavorBar();
+
+  const matchesFlavor = (flavor) => !flavor || flavor === activeFlavor;
+
   /* =====================================================
      Salvos — bandeirinha em cada card guarda/remove a publicação
      de uma lista persistida no navegador (localStorage), acessível
@@ -116,7 +129,7 @@
       if (!photo) return;
       const matches = isSavedTab
         ? savedIndices.has(photo.dataset.storyIndex)
-        : photo.dataset.category === activeCategory;
+        : photo.dataset.category === activeCategory && matchesFlavor(photo.dataset.flavor);
       card.style.display = matches ? '' : 'none';
       if (matches) visibleCount += 1;
     });
@@ -163,6 +176,16 @@
       activeCategory = selector.dataset.category;
       brandSelectors.forEach((s) => s.classList.toggle('is-active', s === selector));
       updateBanner(selector);
+      updateFlavorBar();
+      updateGrid();
+    });
+  });
+
+  flavorChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      if (chip.dataset.flavor === activeFlavor) return;
+      activeFlavor = chip.dataset.flavor;
+      flavorChips.forEach((c) => c.classList.toggle('is-active', c === chip));
       updateGrid();
     });
   });
@@ -227,6 +250,7 @@
             {
               index: img.dataset.storyIndex,
               category: img.dataset.category,
+              flavor: img.dataset.flavor,
               src: img.dataset.storySrc || gridSrc,
               fallbackSrc: gridSrc,
               alt: img.alt || `Publicação ${img.dataset.storyIndex}`,
@@ -380,7 +404,9 @@
       img.addEventListener('click', () => {
         // Só as publicações da mesma marca da foto clicada entram nesse
         // story — evita misturar Creatinas com Carnitech, por exemplo.
-        const groupPosts = posts.filter((p) => p.category === img.dataset.category);
+        const groupPosts = posts.filter(
+          (p) => p.category === img.dataset.category && p.flavor === img.dataset.flavor
+        );
         const index = groupPosts.findIndex((p) => p.index === img.dataset.storyIndex);
         openStory(groupPosts, index === -1 ? 0 : index, img);
       });

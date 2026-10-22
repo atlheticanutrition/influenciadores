@@ -342,9 +342,23 @@ body {
   display: none;
 }
 
+/* margin auto em vez de justify-content: center — com mais bolinhas do que
+   cabem, o center cortava a primeira sem deixar rolar até ela. */
+.categories-row {
+  justify-content: flex-start;
+}
+
+.category:first-child {
+  margin-left: auto;
+}
+
+.category:last-child {
+  margin-right: auto;
+}
+
 .category {
   position: relative;
-  flex: 0 0 22%;
+  flex: 0 0 17%;
   aspect-ratio: 1 / 1;
   border: none;
   background: none;
@@ -430,6 +444,78 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   word-break: break-word;
+}
+
+/* =====================================================
+   Sabores (Clear Juice)
+   ===================================================== */
+
+.flavors {
+  margin: 4.6512% 0 0;         /* 20 / 430 */
+  padding: 3.2558% 0 0;        /* 14 / 430 */
+  border-top: 1px solid var(--cinza-800, #cccccc);
+}
+
+.flavors[hidden] {
+  display: none;
+}
+
+.flavors__title {
+  margin: 0;
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 500;
+  font-size: clamp(11px, 3.1cqw, 12px);
+  color: var(--cinza-400, #666666);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.flavors__row {
+  display: flex;
+  gap: 6px;
+  padding: 0 3.2558%;
+  margin-top: 2.7907%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.flavors__row::-webkit-scrollbar {
+  display: none;
+}
+
+.flavor-chip {
+  flex: 0 0 auto;
+  padding: 0.5em 0.8em;
+  border-radius: 999px;
+  border: 1.5px solid var(--black);
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 600;
+  font-size: clamp(10px, 2.8cqw, 11.5px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.flavor-chip:first-child {
+  margin-left: auto;
+}
+
+.flavor-chip:last-child {
+  margin-right: auto;
+}
+
+.flavor-chip:active {
+  transform: scale(0.96);
+}
+
+.flavor-chip.is-active {
+  background: var(--black);
+  color: var(--white);
 }
 
 /* =====================================================
