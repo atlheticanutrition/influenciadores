@@ -479,6 +479,20 @@ body {
   scrollbar-width: none;
 }
 
+.flavors__row[hidden] {
+  display: none;
+}
+
+.flavors__row--sub {
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.flavors__row--sub .flavor-chip {
+  padding: 0.5em 0.7em;
+  font-size: clamp(9px, 2.4cqw, 10px);
+}
+
 .flavors__row::-webkit-scrollbar {
   display: none;
 }

@@ -60,18 +60,25 @@
     brandSelectors.find((c) => c.classList.contains('is-active'))?.dataset.category ??
     'creatinas';
 
-  // Sabores — a barra só aparece na marca indicada em data-category (Clear
-  // Juice); posts com data-flavor só entram no grid/story do sabor ativo.
-  const flavorBar = document.getElementById('flavorBar');
-  const flavorChips = flavorBar ? Array.from(flavorBar.querySelectorAll('.flavor-chip')) : [];
-  let activeFlavor = flavorChips.find((c) => c.classList.contains('is-active'))?.dataset.flavor ?? null;
+  // Sabores/versões — cada barra só aparece na marca do seu data-category
+  // (X7, Clear Juice); posts com data-flavor só entram no grid/story do
+  // sabor ativo daquela marca.
+  const flavorBars = Array.from(document.querySelectorAll('.flavors'));
+  const activeFlavors = new Map(
+    flavorBars.map((bar) => [
+      bar.dataset.category,
+      bar.querySelector('.flavors__row:not([data-sub-of]) .flavor-chip.is-active')?.dataset.flavor,
+    ])
+  );
 
   const updateFlavorBar = () => {
-    if (flavorBar) flavorBar.hidden = activeCategory !== flavorBar.dataset.category;
+    flavorBars.forEach((bar) => {
+      bar.hidden = bar.dataset.category !== activeCategory;
+    });
   };
   updateFlavorBar();
 
-  const matchesFlavor = (flavor) => !flavor || flavor === activeFlavor;
+  const matchesFlavor = (category, flavor) => !flavor || flavor === activeFlavors.get(category);
 
   /* =====================================================
      Salvos — bandeirinha em cada card guarda/remove a publicação
@@ -129,7 +136,8 @@
       if (!photo) return;
       const matches = isSavedTab
         ? savedIndices.has(photo.dataset.storyIndex)
-        : photo.dataset.category === activeCategory && matchesFlavor(photo.dataset.flavor);
+        : photo.dataset.category === activeCategory &&
+          matchesFlavor(activeCategory, photo.dataset.flavor);
       card.style.display = matches ? '' : 'none';
       if (matches) visibleCount += 1;
     });
@@ -181,12 +189,26 @@
     });
   });
 
-  flavorChips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      if (chip.dataset.flavor === activeFlavor) return;
-      activeFlavor = chip.dataset.flavor;
-      flavorChips.forEach((c) => c.classList.toggle('is-active', c === chip));
-      updateGrid();
+  // Chip com data-sub (ex: STICK no X7) não é um sabor: abre a sub-fileira
+  // de sabores dele, e o sabor ativo passa a ser o chip marcado lá dentro.
+  flavorBars.forEach((bar) => {
+    bar.querySelectorAll('.flavor-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const row = chip.closest('.flavors__row');
+        row.querySelectorAll('.flavor-chip').forEach((c) => c.classList.toggle('is-active', c === chip));
+
+        let flavorChip = chip;
+        if (!row.dataset.subOf) {
+          const sub = chip.dataset.sub ? bar.querySelector(`[data-sub-of="${chip.dataset.sub}"]`) : null;
+          bar.querySelectorAll('[data-sub-of]').forEach((r) => {
+            r.hidden = r !== sub;
+          });
+          if (sub) flavorChip = sub.querySelector('.flavor-chip.is-active');
+        }
+
+        activeFlavors.set(bar.dataset.category, flavorChip?.dataset.flavor);
+        updateGrid();
+      });
     });
   });
 
